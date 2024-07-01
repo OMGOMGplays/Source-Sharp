@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Loke\\source\\repos\\SourceSharp\\SourceSharp.csproj": {}
+    "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\SourceSharp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Loke\\source\\repos\\SourceSharp\\SourceSharp.csproj": {
+    "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\SourceSharp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\SourceSharp.csproj",
+        "projectUniqueName": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\SourceSharp.csproj",
         "projectName": "SourceSharp",
-        "projectPath": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\SourceSharp.csproj",
+        "projectPath": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\SourceSharp.csproj",
         "packagesPath": "C:\\Users\\Loke\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\obj\\",
+        "outputPath": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

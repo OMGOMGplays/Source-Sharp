@@ -1,69 +1,69 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\",
+  "WorkspaceRootPath": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\mathlib\\vector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:sp\\src\\_public\\mathlib\\vector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|c:\\users\\loke\\source\\repos\\sourcesharp\\sp\\src\\_public\\zip\\xzip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\zip\\xzip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:sp\\src\\_public\\zip\\xzip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\lib\\libc\\string\\memset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|c:\\users\\loke\\source\\repos\\source-sharp\\sp\\src\\_public\\mathlib\\vector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:sp\\src\\_public\\mathlib\\vector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\lib\\libc\\string\\memset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:lib\\libc\\string\\memset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\lib\\libc\\string\\memcpy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\lib\\libc\\string\\memcpy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:lib\\libc\\string\\memcpy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\assembly.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\assembly.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:assembly.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\tier1\\utlhandletable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\tier1\\utlhandletable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:mp\\src\\_public\\tier1\\utlhandletable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\tier1\\byteswap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\tier1\\byteswap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:mp\\src\\_public\\tier1\\byteswap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\game\\server\\pluginvariant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\game\\server\\pluginvariant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:sp\\src\\_public\\game\\server\\pluginvariant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\tier0\\basetypes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\tier0\\basetypes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:mp\\src\\_public\\tier0\\basetypes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\steam\\steamuniverse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\steam\\steamuniverse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:sp\\src\\_public\\steam\\steamuniverse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\datamap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\datamap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:mp\\src\\_public\\datamap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\common\\randoverride.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\common\\randoverride.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:mp\\src\\common\\randoverride.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\vstdlib\\random.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\vstdlib\\random.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:mp\\src\\_public\\vstdlib\\random.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\tier0\\platform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\tier0\\platform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:sp\\src\\_public\\tier0\\platform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\steam\\steamclientpublic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\steam\\steamclientpublic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:sp\\src\\_public\\steam\\steamclientpublic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\common\\userid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\common\\userid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D2477DE-1157-4BCD-AA97-5D4222991BF9}|SourceSharp.csproj|solutionrelative:sp\\src\\common\\userid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -74,15 +74,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "memset.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\lib\\libc\\string\\memset.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\lib\\libc\\string\\memset.cs",
               "RelativeDocumentMoniker": "lib\\libc\\string\\memset.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\lib\\libc\\string\\memset.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\lib\\libc\\string\\memset.cs",
               "RelativeToolTip": "lib\\libc\\string\\memset.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAABIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -92,9 +92,9 @@
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "memcpy.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\lib\\libc\\string\\memcpy.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\lib\\libc\\string\\memcpy.cs",
               "RelativeDocumentMoniker": "lib\\libc\\string\\memcpy.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\lib\\libc\\string\\memcpy.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\lib\\libc\\string\\memcpy.cs",
               "RelativeToolTip": "lib\\libc\\string\\memcpy.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAABLAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -102,13 +102,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "xzip.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\zip\\xzip.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\zip\\xzip.cs",
               "RelativeDocumentMoniker": "sp\\src\\_public\\zip\\xzip.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\zip\\xzip.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\zip\\xzip.cs",
               "RelativeToolTip": "sp\\src\\_public\\zip\\xzip.cs",
-              "ViewState": "AQIAAK8EAAAAamZmZmYVwEkFAABlAAAA",
+              "ViewState": "AQIAADkFAAAAAAAAAAA4wHAFAAAqAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-27T23:21:06.728Z",
               "EditorCaption": ""
@@ -117,9 +117,9 @@
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "utlhandletable.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\tier1\\utlhandletable.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\tier1\\utlhandletable.cs",
               "RelativeDocumentMoniker": "mp\\src\\_public\\tier1\\utlhandletable.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\tier1\\utlhandletable.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\tier1\\utlhandletable.cs",
               "RelativeToolTip": "mp\\src\\_public\\tier1\\utlhandletable.cs",
               "ViewState": "AQIAACMAAAAAAAAAAAAowEEAAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -129,9 +129,9 @@
               "$type": "Document",
               "DocumentIndex": 8,
               "Title": "basetypes.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\tier0\\basetypes.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\tier0\\basetypes.cs",
               "RelativeDocumentMoniker": "mp\\src\\_public\\tier0\\basetypes.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\tier0\\basetypes.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\tier0\\basetypes.cs",
               "RelativeToolTip": "mp\\src\\_public\\tier0\\basetypes.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAaAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -141,9 +141,9 @@
               "$type": "Document",
               "DocumentIndex": 13,
               "Title": "platform.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\tier0\\platform.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\tier0\\platform.cs",
               "RelativeDocumentMoniker": "sp\\src\\_public\\tier0\\platform.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\tier0\\platform.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\tier0\\platform.cs",
               "RelativeToolTip": "sp\\src\\_public\\tier0\\platform.cs",
               "ViewState": "AQIAADIAAAAAAAAAAAAQwGkAAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -153,9 +153,9 @@
               "$type": "Document",
               "DocumentIndex": 12,
               "Title": "random.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\vstdlib\\random.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\vstdlib\\random.cs",
               "RelativeDocumentMoniker": "mp\\src\\_public\\vstdlib\\random.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\vstdlib\\random.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\vstdlib\\random.cs",
               "RelativeToolTip": "mp\\src\\_public\\vstdlib\\random.cs",
               "ViewState": "AQIAABIAAAAAAAAAAAAmwBYAAAAtAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -165,9 +165,9 @@
               "$type": "Document",
               "DocumentIndex": 11,
               "Title": "randoverride.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\common\\randoverride.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\common\\randoverride.cs",
               "RelativeDocumentMoniker": "mp\\src\\common\\randoverride.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\common\\randoverride.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\common\\randoverride.cs",
               "RelativeToolTip": "mp\\src\\common\\randoverride.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAABAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -177,9 +177,9 @@
               "$type": "Document",
               "DocumentIndex": 10,
               "Title": "datamap.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\datamap.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\datamap.cs",
               "RelativeDocumentMoniker": "mp\\src\\_public\\datamap.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\datamap.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\datamap.cs",
               "RelativeToolTip": "mp\\src\\_public\\datamap.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAHcAAAArAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -189,9 +189,9 @@
               "$type": "Document",
               "DocumentIndex": 6,
               "Title": "byteswap.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\tier1\\byteswap.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\tier1\\byteswap.cs",
               "RelativeDocumentMoniker": "mp\\src\\_public\\tier1\\byteswap.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\mp\\src\\_public\\tier1\\byteswap.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\mp\\src\\_public\\tier1\\byteswap.cs",
               "RelativeToolTip": "mp\\src\\_public\\tier1\\byteswap.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAABoAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -201,9 +201,9 @@
               "$type": "Document",
               "DocumentIndex": 9,
               "Title": "steamuniverse.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\steam\\steamuniverse.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\steam\\steamuniverse.cs",
               "RelativeDocumentMoniker": "sp\\src\\_public\\steam\\steamuniverse.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\steam\\steamuniverse.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\steam\\steamuniverse.cs",
               "RelativeToolTip": "sp\\src\\_public\\steam\\steamuniverse.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -213,9 +213,9 @@
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "pluginvariant.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\game\\server\\pluginvariant.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\game\\server\\pluginvariant.cs",
               "RelativeDocumentMoniker": "sp\\src\\_public\\game\\server\\pluginvariant.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\game\\server\\pluginvariant.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\game\\server\\pluginvariant.cs",
               "RelativeToolTip": "sp\\src\\_public\\game\\server\\pluginvariant.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAACkAAACXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -223,11 +223,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "vector.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\mathlib\\vector.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\mathlib\\vector.cs",
               "RelativeDocumentMoniker": "sp\\src\\_public\\mathlib\\vector.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\mathlib\\vector.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\mathlib\\vector.cs",
               "RelativeToolTip": "sp\\src\\_public\\mathlib\\vector.cs",
               "ViewState": "AQIAAPoFAAAAKDMzM3MvwMIDAAAYAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -238,9 +238,9 @@
               "$type": "Document",
               "DocumentIndex": 14,
               "Title": "steamclientpublic.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\steam\\steamclientpublic.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\steam\\steamclientpublic.cs",
               "RelativeDocumentMoniker": "sp\\src\\_public\\steam\\steamclientpublic.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\_public\\steam\\steamclientpublic.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\_public\\steam\\steamclientpublic.cs",
               "RelativeToolTip": "sp\\src\\_public\\steam\\steamclientpublic.cs",
               "ViewState": "AQIAAN8CAAAAAAAAAAAgwGsCAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -250,9 +250,9 @@
               "$type": "Document",
               "DocumentIndex": 4,
               "Title": "Assembly.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\Assembly.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\Assembly.cs",
               "RelativeDocumentMoniker": "Assembly.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\Assembly.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\Assembly.cs",
               "RelativeToolTip": "Assembly.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAiAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -262,9 +262,9 @@
               "$type": "Document",
               "DocumentIndex": 15,
               "Title": "userid.cs",
-              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\common\\userid.cs",
+              "DocumentMoniker": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\common\\userid.cs",
               "RelativeDocumentMoniker": "sp\\src\\common\\userid.cs",
-              "ToolTip": "C:\\Users\\Loke\\source\\repos\\SourceSharp\\sp\\src\\common\\userid.cs",
+              "ToolTip": "C:\\Users\\Loke\\source\\repos\\Source-Sharp\\sp\\src\\common\\userid.cs",
               "RelativeToolTip": "sp\\src\\common\\userid.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",

@@ -1343,15 +1343,55 @@
         public static int longest_match(TState state, IPos cur_match)
         {
             uint chain_length = state.ds.max_chain_length;
-            uch scan = (char)(state.ds.window[0] + state.ds.strstart); // FIXME: Pointer unpointed here in source code, un-array state.ds.window somehow to fix this
-            uch match;
+            uch[] scan = state.ds.window + state.ds.strstart; // FIXME: Pointer unpointed here in source code, un-array state.ds.window somehow to fix this
+            uch[] match;
             int len;
             int best_len = (int)state.ds.prev_length;
             IPos limit = (nint)(state.ds.strstart > (IPos)MAX_DIST ? state.ds.strstart - (IPos)MAX_DIST : NIL);
 
             Assert(state, HASH_BITS >= 8 && MAX_MATCH == 258, "Code too clever");
 
-            uch strend = state.ds.window[0] + state.ds.strstart + MAX_MATCH; // FIXME: Ditto as above
+            uch[] strend = state.ds.window + state.ds.strstart + MAX_MATCH; // FIXME: Ditto as above
+            uch scan_end1 = scan[best_len - 1];
+            uch scan_end = scan[best_len];
+
+            if (state.ds.prev_length >= state.ds.good_match)
+            {
+                chain_length >>= 2;
+            }
+
+            Assert(state, state.ds.strstart <= state.ds.window_size - MIN_LOOKAHEAD, "insufficient lookahead");
+
+            do
+            {
+                Assert(state, cur_match < state.ds.strstart, "no future");
+                match = state.ds.window + cur_match;
+
+                if (match[best_len] != scan_end ||
+                    match[best_len - 1] != scan_end1 ||
+                    match != scan ||
+                    ++match != scan[1]) // FIXME: ++ on an array doesn't work... That is a pointer function! Fix!
+                {
+                    continue;
+                }
+
+                scan += 2;
+                match++;
+
+                do
+                {
+
+                } while (++scan == ++match && ++scan == ++match &&
+                         ++scan == ++match && ++scan == ++match &&
+                         ++scan == ++match && ++scan == ++match &&
+                         ++scan == ++match && ++scan == ++match &&
+                         scan < strend);
+
+                Assert(state, scan <= state.ds.window + (uint)(state.ds.window_size - 1), "wild scan");
+
+                len = MAX_MATCH - (int)(strend - scan);
+                scan = strend - MAX_MATCH;
+            }
         }
 
         public static dynamic UPDATE_HASH(dynamic h, dynamic c) => h = (((h) << H_SHIFT) ^ (c)) & HASH_MASK;
