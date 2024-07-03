@@ -1,5 +1,12 @@
-bin/*
-obj/*
+# SP
+sp/bin/*
+sp/build/*
+sp/obj/*
+
+# MP
+mp/bin/*
+mp/build/*
+mp/obj/*
 
 # Shared
 .vs/*

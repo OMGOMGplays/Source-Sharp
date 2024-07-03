@@ -8,5 +8,6 @@
     <StartupObject />
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <ImplicitUsings>disable</ImplicitUsings>
+    <BaseOutputPath>..\build\SP</BaseOutputPath>
   </PropertyGroup>
 </Project>
