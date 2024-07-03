@@ -6,7 +6,7 @@
 
 
 # Introduction
-This is my attempt at rewriting the Source 2013 SDK's C++ code to C#.
+This is my attempt at rewriting the ![Source 2013 SDK](https://github.com/ValveSoftware/source-sdk-2013)'s C++ code to C#.
 
 >[!NOTE]
 >This project is not endorsed in any way by the original developers of the Source SDK, Valve!
