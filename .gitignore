@@ -1,13 +1,7 @@
-# SP
-sp/bin/*
-sp/build/*
-sp/obj/*
-
-# MP
-mp/bin/*
-mp/build/*
-mp/obj/*
-
 # Shared
 .vs/*
 *.vsidx
+
+# The solution and project files will be automatically built with a batch file.
+*.sln
+*.csproj 
