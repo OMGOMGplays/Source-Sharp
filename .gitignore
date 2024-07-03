@@ -2,6 +2,31 @@
 .vs/*
 *.vsidx
 
+# SP
+
+# Captioncompiler
+sp\src\utils\captioncompiler\obj\*
+sp\src\utils\captioncompiler\bin\*
+
+# SP - Shared
+sp\game\*
+sp\src\.vs\*
+sp\src\obj\*
+
+# MP
+mp\obj\*
+mp\bin\*
+
+# MP - Shared
+mp\game\*
+mp\src\.vs\*
+mp\src\obj\*
+
+# Shared
+bin\*
+obj\*
+build\*
+
 # The solution and project files will be automatically built with a batch file.
 *.sln
 *.csproj 
