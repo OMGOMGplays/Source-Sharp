@@ -5,7 +5,6 @@
 
 namespace SourceSharp.sp.src._public.steam
 {
-    using HAuthTicket = uint;
     using BREAKPAD_HANDLE = IntPtr;
 
     public class steamclientpublic
@@ -559,7 +558,7 @@ namespace SourceSharp.sp.src._public.steam
                 {
 #if VALVE_BIG_ENDIAN
                     public steamuniverse.EUniverse m_EUniverse; // : 8;
-                    public uint m_EAccountType; // : 4;
+                    public /*uint*/ EAccountType m_EAccountType; // : 4; - Why the uint?
                     public uint m_unAccountInstance; // : 20;
                     public uint m_unAccountID; // : 32;
 #else
@@ -823,7 +822,7 @@ namespace SourceSharp.sp.src._public.steam
             {
 #if VALVE_BIG_ENDIAN
                 public uint m_nModID; // : 32;
-                public /*uint*/ m_nType; // : 8; - Again, why the uint?
+                public /*uint*/ EGameIDType m_nType; // : 8; - Again, why the uint?
                 public uint m_nAppID; // : 24;
 #else
                 public uint m_nAppID; // : 24;
@@ -841,7 +840,7 @@ namespace SourceSharp.sp.src._public.steam
         public const int QUERY_PORT_NOT_INITIALIZED = 0xFFFF;
         public const int QUERY_PORT_ERROR = 0xFFFE;
 
-        public delegate void PFNPreMinidumpCallback(IntPtr context);
+        public delegate void PFNPreMinidumpCallback(object context);
 
         public static int BREAKPAD_INVALID_HANDLE(BREAKPAD_HANDLE x) => 0;
     }

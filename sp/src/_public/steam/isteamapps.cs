@@ -52,10 +52,12 @@ namespace SourceSharp.sp.src._public.steam
 
         public struct DlcInstalled_t
         {
-            public enum callback
+            public DlcInstalled_t()
             {
-                k_iCallback = k_iSteamAppsCallbacks + 5
+                k_iCallback = isteamclient.k_iSteamAppsCallbacks + 5;
             }
+
+            public int k_iCallback;
 
             public AppId_t m_nAppID;
         }
@@ -71,10 +73,12 @@ namespace SourceSharp.sp.src._public.steam
 
         public struct RegisterActivationCodeResponse_t
         {
-            public enum callback
+            public RegisterActivationCodeResponse_t()
             {
-                k_iCallback = k_iSteamAppsCallbacks + 8
+                k_iCallback = isteamclient.k_iSteamAppsCallbacks + 8;
             }
+
+            public int k_iCallback;
 
             public ERegisterActivationCodeResult m_eResult;
             public uint m_unPackageRegistered;
@@ -82,10 +86,12 @@ namespace SourceSharp.sp.src._public.steam
 
         public struct AppProofOfPurchaseKeyResponse_t
         {
-            public enum callback
+            public AppProofOfPurchaseKeyResponse_t()
             {
-                k_iCallback = k_iSteamAppsCallbacks + 13
+                k_iCallback = isteamclient.k_iSteamAppsCallbacks + 13;
             }
+
+            public int k_iCallback;
 
             public steamclientpublic.EResult m_eResult;
             public uint m_nAppID;
@@ -94,10 +100,12 @@ namespace SourceSharp.sp.src._public.steam
 
         public struct NewLaunchQueryParameters_t
         {
-            public enum callback
+            public NewLaunchQueryParameters_t()
             {
-                k_iCallback = k_iSteamAppsCallbacks + 14
+                k_iCallback = isteamclient.k_iSteamAppsCallbacks + 14;
             }
+
+            public int k_iCallback;
         }
     }
 }

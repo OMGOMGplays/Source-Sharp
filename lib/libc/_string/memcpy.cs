@@ -1,4 +1,4 @@
-﻿namespace SourceSharp.lib.libc
+﻿namespace SourceSharp.lib.libc._string
 {
     public class memcpy_
     {

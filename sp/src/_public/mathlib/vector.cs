@@ -936,7 +936,7 @@ namespace SourceSharp.sp.src._public.mathlib
 #if !VECTOR_NO_SLOW_OPERATIONS
         public static Vector CrossProduct(Vector a, Vector b)
         {
-            return new Vector(a.y * b.z - a.z * b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
+            return new Vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
         }
 
         public static Vector RandomVector(vec_t minVal, vec_t maxVal)
@@ -947,26 +947,62 @@ namespace SourceSharp.sp.src._public.mathlib
         }
 #endif // !VECTOR_NO_SLOW_OPERATIONS
 
-        public static float RandomVectorInUnitSphere(Vector pVector)
+        public static float RandomVectorInUnitSphere(out Vector pVector)
         {
-            return -1.0f;
+            float u = ((float)randoverride.rand() / platform.VALVE_RAND_MAX);
+            float v = ((float)randoverride.rand() / platform.VALVE_RAND_MAX);
+            float w = ((float)randoverride.rand() / platform.VALVE_RAND_MAX);
+
+            float flPhi = mathlib_base.acos(1 - 2 * u);
+            float flTheta = 2 * (float)basetypes.M_PI * v;
+            float flRadius = mathlib_base.powf(w, 1.0f / 3.0f);
+
+            float flSinPhi, flCosPhi;
+            float flSinTheta, flCosTheta;
+            mathlib_base.SinCos(flPhi, out flSinPhi, out flCosPhi);
+            mathlib_base.SinCos(flTheta, out flSinTheta, out flCosTheta);
+
+            Vector vector = new();
+
+            vector.x = flRadius * flSinPhi * flCosTheta;
+            vector.y = flRadius * flSinPhi * flSinTheta;
+            vector.z = flRadius * flCosPhi;
+
+            pVector = vector;
+            return flRadius;
         }
 
-        public static float RandomVectorInUnitCircle(Vector2D pVector)
+        public static float RandomVectorInUnitCircle(out vector2d.Vector2D pVector)
         {
-            return -1.0f;
+            float u = ((float)randoverride.rand() / platform.VALVE_RAND_MAX);
+            float v = ((float)randoverride.rand() / platform.VALVE_RAND_MAX);
+
+            float flTheta = 2 * (float)basetypes.M_PI * v;
+            float flRadius = mathlib_base.powf(u, 1.0f / 2.0f);
+
+            float flSinTheta, flCosTheta;
+            mathlib_base.SinCos(flTheta, out flSinTheta, out flCosTheta);
+
+            vector2d.Vector2D vector = new();
+
+            vector.x = flRadius * flCosTheta;
+            vector.y = flRadius * flSinTheta;
+
+            pVector = vector;
+            return flRadius;
         }
 
-        public static void ShortVectorMultiply(ShortVector src, float fl, out ShortVector res)
-        {
-            xzip.Assert(cond: basetypes.IsFinite(fl));
-            ShortVector r = new();
-            r.x = src.x * (short)fl;
-            r.y = src.y * (short)fl;
-            r.z = src.z * (short)fl;
-            r.w = src.w * (short)fl;
-            res = r;
-        }
+        // FIXME: This is a random error I don't know the fix for, saying something about short can't multiply with int, despite both sides and the recipient (r.*) being short:s?
+        //public static void ShortVectorMultiply(ShortVector src, float fl, out ShortVector res)
+        //{
+        //    xzip.Assert(cond: basetypes.IsFinite(fl));
+        //    ShortVector r = new();
+        //    r.x = src.x * (short)fl;
+        //    r.y = src.y * (short)fl;
+        //    r.z = src.z * (short)fl;
+        //    r.w = src.w * (short)fl;
+        //    res = r;
+        //}
 
         public static void IntVector4DMultiply(IntVector4D src, float fl, out IntVector4D res)
         {
@@ -1211,38 +1247,38 @@ namespace SourceSharp.sp.src._public.mathlib
 
         public class RadianEuler
         {
-            public RadianEuler() 
+            public RadianEuler()
             {
             }
 
-            public RadianEuler(vec_t x, vec_t y, vec_t z) 
-            { 
-                this.x = x; this.y = y; this.z = z; 
+            public RadianEuler(vec_t x, vec_t y, vec_t z)
+            {
+                this.x = x; this.y = y; this.z = z;
             }
-            
-            public RadianEuler(Quaternion q) 
+
+            public RadianEuler(Quaternion q)
             {
                 QuaternionAngles(q, this);
             }
 
-            public RadianEuler(QAngle angles) 
+            public RadianEuler(QAngle angles)
             {
                 Init(angles.z * 3.1414159265358979323846f / 180.0f, angles.x * 3.1414159265358979323846f / 180.0f, angles.y * 3.1414159265358979323846f / 180.0f);
             }
 
             public void Init(vec_t ix = 0.0f, vec_t iy = 0.0f, vec_t iz = 0.0f) { x = ix; y = iy; z = iz; }
 
-            public QAngle ToQAngle() 
+            public QAngle ToQAngle()
             {
                 return new QAngle(y * 180.0f / 3.1414159265358979323846f, z * 180.0f / 3.1414159265358979323846f, x * 180.0f / 3.1414159265358979323846f);
             }
-            
-            public bool IsValid() 
+
+            public bool IsValid()
             {
                 return basetypes.IsFinite(x) && basetypes.IsFinite(y) && basetypes.IsFinite(z);
             }
-            
-            public void Invalidate() 
+
+            public void Invalidate()
             {
                 x = y = z = basetypes.VEC_T_NAN;
             }

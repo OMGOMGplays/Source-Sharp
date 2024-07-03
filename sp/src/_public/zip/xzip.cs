@@ -1375,7 +1375,7 @@
                     continue;
                 }
 
-                scan += 2;
+                scan += 2; // FIXME: Ditto as aove
                 match++;
 
                 do
@@ -1385,7 +1385,7 @@
                          ++scan == ++match && ++scan == ++match &&
                          ++scan == ++match && ++scan == ++match &&
                          ++scan == ++match && ++scan == ++match &&
-                         scan < strend);
+                         scan < strend); // FIXME: This is a massacre...
 
                 Assert(state, scan <= state.ds.window + (uint)(state.ds.window_size - 1), "wild scan");
 

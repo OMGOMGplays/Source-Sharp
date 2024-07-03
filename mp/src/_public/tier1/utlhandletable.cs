@@ -71,7 +71,7 @@ namespace SourceSharp.mp.src._public.tier1
                     return;
                 }
 
-                if (entry.nInvalid != 0)
+                if (entry?.nInvalid != 0)
                 {
                     ++m_nValidHandles;
                     entry.nInvalid = 0;
@@ -83,13 +83,13 @@ namespace SourceSharp.mp.src._public.tier1
             public dynamic GetHandle(UtlHandle_t h)
             {
                 EntryType_t? entry = GetEntry(h, true);
-                return entry == null ? entry.m_pData : null;
+                return entry == null ? entry?.m_pData : null;
             }
 
             public dynamic GetHandle(UtlHandle_t h, bool checkValidity)
             {
                 EntryType_t? entry = GetEntry(h, checkValidity);
-                return entry == null ? entry.m_pData : null;
+                return entry == null ? entry?.m_pData : null;
             }
 
             public bool IsHandleValid(UtlHandle_t h)
@@ -220,8 +220,8 @@ namespace SourceSharp.mp.src._public.tier1
                     xzip.Assert(cond: s < (1 << (31 - HandleBits)));
                 }
 
-                private uint nIndex; // : HandleBits;
-                private uint nSerial; // : 31 - HandleBits;
+                public uint nIndex; // : HandleBits;
+                public uint nSerial; // : 31 - HandleBits;
             }
 
             private struct EntryType_t

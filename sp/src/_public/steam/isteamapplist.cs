@@ -17,15 +17,16 @@ namespace SourceSharp.sp.src._public.steam
 
         public const string STEAMAPPLIST_INTERFACE_VERSION = "STEAMAPPLIST_INTERFACE_VERSION001";
 
-        static isteamapplist()
-        {
-            isteamclient.DEFINE_CALLBACK(SteamAppInstalled_t, k_iSteamAppListCallbacks + 1);
-            isteamclient.CALLBACK_MEMBER(0, AppId_t, m_nAppID);
-            isteamclient.END_DEFINE_CALLBACK_1();
+        // FIXME: This is not going to work... Find some way to do the similar things of which the #define's does stuff!
+        //static isteamapplist()
+        //{
+        //    isteamclient.DEFINE_CALLBACK(SteamAppInstalled_t, k_iSteamAppListCallbacks + 1);
+        //    isteamclient.CALLBACK_MEMBER(0, AppId_t, m_nAppID);
+        //    isteamclient.END_DEFINE_CALLBACK_1();
 
-            isteamclient.DEFINE_CALLBACK(SteamAppUninstalled_t, k_iSteamAppListCallbacks + 2);
-            isteamclient.CALLBACK_MEMBER(0, AppId_t, m_nAppID);
-            isteamclient.END_DEFINE_CALLBACK_1();
-        }
+        //    isteamclient.DEFINE_CALLBACK(SteamAppUninstalled_t, k_iSteamAppListCallbacks + 2);
+        //    isteamclient.CALLBACK_MEMBER(0, AppId_t, m_nAppID);
+        //    isteamclient.END_DEFINE_CALLBACK_1();
+        //}
     }
 }
