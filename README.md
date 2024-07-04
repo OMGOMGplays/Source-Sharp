@@ -21,7 +21,7 @@ And also because I'm bored.
 
 ---
 ### Progress
-![Multiplayer](https://progress-bar.dev/1/?title=Multiplayer)
+![Multiplayer](https://progress-bar.dev/0/?title=Multiplayer)
 ![Singleplayer](https://progress-bar.dev/1/?title=Singleplayer)
 
 > These progress bars will be counted by our file count divided by the SDK's file count in their respective folders (sp & mp)
