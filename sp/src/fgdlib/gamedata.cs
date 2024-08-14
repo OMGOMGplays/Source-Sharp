@@ -1,18 +1,9 @@
-﻿#define GAMEDATA_H
+﻿using System.Runtime.InteropServices;
 
-// gamedata.h
-
-global using TNameFixup = gamedata.GameData.TNameFixup_e;
-
-// gamedata.cpp
+namespace FGDLib;
 
 public class gamedata
 {
-    // gamedata.h
-
-    public class MDkeyvalue;
-    public class KeyValues;
-
     public enum TEXTUREFORMAT;
 
     public static object GameDataMessageFunc_t(int level, PRINTF_FORMAT_STRING fmt, params object[] args)
@@ -76,7 +67,7 @@ public class gamedata
             }
 
             trtoken_t ttype;
-            string szToken;
+            string szToken = string.Empty;
 
             while (true)
             {
@@ -237,7 +228,7 @@ public class gamedata
             {
                 GDclass mp = m_Classes.Element(i);
 
-                if (!strcmp(mp.GetName(), pszName))
+                if (string.Compare(mp.GetName(), pszName) == 0)
                 {
                     if (piIndex != null)
                     {
@@ -295,14 +286,14 @@ public class gamedata
             m_InstanceAngle = angle;
             AngleMatrix(m_InstanceAngle, m_InstanceOrigin, m_InstanceMat);
 
-            strcpy(m_InstancePrefix, pszInstancePrefix);
+            m_InstancePrefix = pszInstancePrefix;
 
             if (m_InstanceClass != null)
             {
                 m_InstanceClass = null;
             }
 
-            if (strcmpi(pszClassName, "info_overlay_accessor") == 0)
+            if (string.Compare(pszClassName.ToLower(), "info_overlay_accessor") == 0)
             {
                 pszClassName = "info_overlay";
             }
@@ -386,9 +377,21 @@ public class gamedata
                 case tRemapOperation.REMAP_POSITION:
                     Vector inPoint = new(0.0f, 0.0f, 0.0f), outPoint;
 
-                    sscanf(pszInValue, "{0} {1} {2}", inPoint.x, inPoint.y, inPoint.z);
+                    string[] positionParts = pszInValue.Split(' ');
+                    if (positionParts.Length == 3)
+                    {
+                        float.TryParse(positionParts[0], out inPoint.x);
+                        float.TryParse(positionParts[1], out inPoint.y);
+                        float.TryParse(positionParts[2], out inPoint.z);
+                    }
+                    else
+                    {
+                        throw new Exception("RemapKeyValue: parts.Length != 3");
+                    }
+                    
                     VectorTransform(inPoint, m_InstanceMat, outPoint);
-                    sprintf(pszOutValue, "{0} {1} {2}", outPoint.x, outPoint.y, outPoint.z);
+
+                    string.Format(pszOutValue + "{0} {1} {2}", outPoint.x, outPoint.y, outPoint.z);
 
                     break;
 
@@ -398,34 +401,226 @@ public class gamedata
                         QAngle inAngles = new(0.0f, 0.0f, 0.0f), outAngles;
                         matrix4x3 angToWorld, localMatrix;
 
-                        sscanf(pszInValue, "{0} {1} {2}", inAngles.x, inAngles.y, inAngles.z);
+                        string[] angleParts = pszInValue.Split(' ');
+                        if (angleParts.Length == 3)
+                        {
+                            float.TryParse(angleParts[0], out inAngles.x);
+                            float.TryParse(angleParts[1], out inAngles.y);
+                            float.TryParse(angleParts[2], out inAngles.z);
+                        }
+                        else
+                        {
+                            throw new Exception("RemapKeyValue: parts.Length != 3");
+                        }
 
                         AngleMatrix(inAngles, angToWorld);
                         MatrixMultiply(m_InstanceMat, angToWorld, localMatrix);
                         MatrixAngles(localMatrix, outAngles);
 
-                        sprintf(pszOutValue, "{0} {1} {2}", outAngles.x, outAngles.y, outAngles.z);
+                        string.Format(pszOutValue + "{0} {1} {2}", outAngles.x, outAngles.y, outAngles.z);
                     }
 
                     break;
 
+                case tRemapOperation.REMAP_ANGLE_NEGATIVE_PITCH:
+                    if (m_InstanceAngle.x != 0.0f || m_InstanceAngle.y != 0.0f || m_InstanceAngle.z != 0.0f)
+                    {
+                        QAngle inAngles = new(0.0f, 0.0f, 0.0f), outAngles;
+                        matrix3x4_t angToWorld, localMatrix;
 
+                        float.TryParse(pszInValue, out inAngles.x);
+                        inAngles.x = -inAngles.x;
+
+                        AngleMatrix(inAngles, angToWorld);
+                        MatrixMultiply(m_InstanceMat, angToWorld, localMatrix);
+                        MatrixAngles(localMatrix, outAngles);
+
+                        string.Format(pszOutValue + "{0}", -outAngles.x);
+                    }
+
+                    break;
             }
+
+            return string.Compare(pszInValue.ToLower(), pszOutValue.ToLower()) != 0;
         }
 
+        ///-----------------------------------------------------------------------------
+        /// <summary>
+        /// Purpose: this function will attempt to remap a name field. <br></br>
+        /// <br></br>
+        /// Input  : pszInvalue - the original value <br></br>
+        ///			    AllowNameRemapping - only do name remapping if this parameter is true. <br></br>
+        ///				this is generally only false on the instance level.<br></br>
+        ///	<br></br>
+        /// Output : returns true if the value changed<br></br>
+        ///			pszOutValue - the new value if changed
+        /// </summary>
+        ///-----------------------------------------------------------------------------
         public bool RemapNameField(string pszInValue, out string pszOutValue, TNameFixup nameFixup)
         {
+            pszOutValue = pszInValue;
 
+            char[] pszInValue_Char = pszInValue.ToCharArray();
+
+            if (pszInValue_Char[0] != '\0' && pszInValue_Char[0] != '@')
+            {
+                switch (nameFixup)
+                {
+                    case TNameFixup.NAME_FIXUP_PREFIX:
+                        string.Format(pszOutValue + "{0}-{1}", m_InstancePrefix, pszInValue);
+                        break;
+
+                    case TNameFixup.NAME_FIXUP_POSTFIX:
+                        string.Format(pszOutValue + "{0}-{1}", pszInValue, m_InstancePrefix);
+                        break;
+                }
+            }
+
+            return string.Compare(pszInValue.ToLower(), pszOutValue.ToLower()) != 0;
         }
 
+        ///-----------------------------------------------------------------------------
+        /// <summary>
+        /// Purpose: Gathers any FGD-defined material directory exclusions <br></br>
+        /// <br></br>
+        /// Input  : <br></br>
+        /// <br></br>
+        /// Output : 
+        /// </summary>
+        ///-----------------------------------------------------------------------------
         public bool LoadFGDMaterialExclusions(TokenReader tr)
         {
+            if (!GDSkipToken(tr, trtoken_t.OPERATOR, "["))
+            {
+                return false;
+            }
 
+            while (true)
+            {
+                string szToken = string.Empty;
+                int szTokenSize = 128;
+                bool bMatchFound = false;
+
+                if (tr.PeekTokenType(szToken, szTokenSize) == trtoken_t.OPERATOR)
+                {
+                    break;
+                }
+                else if (GDGetToken(tr, szToken, szTokenSize, trtoken_t.STRING))
+                {
+                    for (int i = 0; i < m_FGDMaterialExclusions.Count(); i++)
+                    {
+                        if (string.Compare(szToken.ToLower(), m_FGDMaterialExclusions[i].szDirectory.ToLower()) == 0)
+                        {
+                            bMatchFound = true;
+                            break;
+                        }
+                    }
+
+                    if (bMatchFound == false)
+                    {
+                        int index = m_FGDMaterialExclusions.AddToTail();
+                        m_FGDMaterialExclusions[index].szDirectory = szToken;
+                        m_FGDMaterialExclusions[index].bUserGenerated = false;
+                    }
+                }
+            }
+
+            if (!GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
+            {
+                return false;
+            }
+
+            return true;
         }
 
+       ///-----------------------------------------------------------------------------
+       ///<summary>
+       /// Purpose: Gathers any FGD-defined Auto VisGroups <br></br>
+       /// <br></br>
+       /// Input  : <br></br> 
+       /// <br></br>
+       /// Output :
+       /// </summary>
+       ///-----------------------------------------------------------------------------
         public bool LoadFGDAutoVisGroups(TokenReader tr)
         {
+            int gindex = 0;
+            int cindex = 0;
 
+            string szToken = string.Empty;
+            int szTokenSize = 128;
+
+            if (GDSkipToken(tr, trtoken_t.OPERATOR, "="))
+            {
+                if (!GDGetToken(tr, szToken, szTokenSize, trtoken_t.STRING))
+                {
+                    return false;
+                }
+
+                gindex = m_FGDAutoVisGroups.AddToTail();
+                m_FGDAutoVisGroups[gindex].szParent = szToken;
+
+                if (!GDSkipToken(tr, trtoken_t.OPERATOR, "["))
+                {
+                    return false;
+                }
+            }
+
+            while (true)
+            {
+                if (GDGetToken(tr, szToken, szTokenSize, trtoken_t.STRING))
+                {
+                    cindex = m_FGDAutoVisGroups[gindex].m_Classes.AddToTail();
+                    m_FGDAutoVisGroups[gindex].m_Classes[cindex].szClass = szToken;
+
+                    if (!GDSkipToken(tr, trtoken_t.OPERATOR, "["))
+                    {
+                        return false;
+                    }
+
+                    while (true)
+                    {
+                        if (tr.PeekTokenType(szToken, szTokenSize) == trtoken_t.OPERATOR)
+                        {
+                            break;
+                        }
+
+                        if (!GDGetToken(tr, szToken, szTokenSize, trtoken_t.STRING))
+                        {
+                            return false;
+                        }
+
+                        m_FGDAutoVisGroups[gindex].m_Classes[cindex].szEntities.CopyAndAddToTail(szToken);
+                    }
+
+                    if (!GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
+                    {
+                        return false;
+                    }
+
+                    if (tr.PeekTokenType(szToken, szTokenSize) == trtoken_t.STRING)
+                    {
+                        continue;
+                    }
+
+                    if (!GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
+                else
+                {
+                    if (!GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            GDError(tr, "Malformed AutoVisGroup -- Last Processed: {0}", szToken);
+            return false;
         }
 
         public CUtlVector<FGDMatExclusions_s> m_FGDMaterialExclusions;
