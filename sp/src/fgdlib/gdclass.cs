@@ -3,7 +3,7 @@
 namespace FGDLib;
 
 public class gdclass
-{ 
+{
     public const int GD_MAX_VARIABLES = 128;
 
     public class GDclass
@@ -71,7 +71,7 @@ public class gdclass
                 m_bmaxs[i] = 8;
             }
         }
-        
+
         // Destructor might not be necessary?
 
         public string GetName()
@@ -89,9 +89,56 @@ public class gdclass
             return m_pszDescription;
         }
 
-        public bool InitFromTokens(TokenReader tr, gamedata.GameData gameData)
+        public bool InitFromTokens(TokenReader tr, gamedata.GameData pGD)
         {
+            Parent = pGD;
 
+            for (int i = 0; i < GD_MAX_VARIABLES; i++)
+            {
+                m_VariableMap[i, 0] = -1;
+                m_VariableMap[i, 1] = -1;
+            }
+
+            if (!ParseSpecifiers(tr))
+            {
+                return false;
+            }
+
+            if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "="))
+            {
+                return false;
+            }
+
+            string szToken = string.Empty;
+
+            if ((tr.PeekTokenType(szToken, szToken.Length) == trtoken_t.OPERATOR) && tokenreader.IsToken(szToken, ":"))
+            {
+                tr.NextToken(szToken, szToken.Length);
+
+                m_pszDescription = null;
+
+                if (!gamedata.GDGetTokenDynamic(tr, m_pszDescription, trtoken_t.STRING))
+                {
+                    return false;
+                }
+            }
+
+            if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "["))
+            {
+                return false;
+            }
+
+            if (!ParseVariables(tr))
+            {
+                return false;
+            }
+
+            if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public int GetVariableCount()
@@ -101,17 +148,58 @@ public class gdclass
 
         public GDinputvariable GetVariableAt(int iIndex)
         {
+            if (iIndex < 0 || iIndex >= m_nVariables)
+            {
+                return null;
+            }
 
+            if (m_VariableMap[iIndex, 0] == -1)
+            {
+                return m_Variables.Element(m_VariableMap[iIndex, 1]);
+            }
+
+            GDclass pVarClass = Parent.GetClass(m_VariableMap[iIndex, 0]);
+
+            return pVarClass.GetVariableAt(m_VariableMap[iIndex, 1]);
         }
 
-        public void GetHelperForGDVar(GDinputvariable pVar, CUtlVector<string> helperName)
+        public void GetHelperForGDVar(GDinputvariable pVar, out CUtlVector<string> pszHelperName)
         {
+            string pszName = pVar.GetName();
 
+            for (int i = 0; i < GetHelperCount(); i++)
+            {
+                CHelperInfo pHelper = GetHelper(i);
+                int nParamCount = pHelper.GetParameterCount();
+
+                for (int j = 0; j < nParamCount; j++)
+                {
+                    if (string.Compare(pszName.ToLower(), pHelper.GetParemeter(j)) == 0)
+                    {
+                        pszHelperName.AddToTail(pHelper.GetName());
+                    }
+                }
+            }
         }
 
         public GDinputvariable VarForName(string pszName, int piIndex = 0)
         {
+            for (int i = 0; i < GetVariableCount(); i++)
+            {
+                GDinputvariable pVar = GetVariableAt(i);
 
+                if (string.Compare(pVar.GetName().ToLower(), pszName.ToLower()) == 0)
+                {
+                    if (piIndex != 0)
+                    {
+                        piIndex = i;
+                    }
+
+                    return pVar;
+                }
+            }
+
+            return null;
         }
 
         public bool AddVariable(GDinputvariable pVar, GDclass pBase, int iBaseIndex, int iVarIndex)
@@ -248,7 +336,19 @@ public class gdclass
 
         public CClassInput FindInput(string szName)
         {
+            int nCount = GetInputCount();
 
+            for (int i = 0; i < nCount; i++)
+            {
+                CClassInput pInput = GetInput(i);
+
+                if (string.Compare(pInput.GetName().ToLower(), szName.ToLower()) == 0)
+                {
+                    return pInput;
+                }
+            }
+
+            return null;
         }
 
         public int GetInputCount()
@@ -258,7 +358,7 @@ public class gdclass
 
         public CClassInput GetInput(int nIndex)
         {
-
+            return m_Inputs.Element(nIndex);
         }
 
         public void AddOutput(CClassOutput pOutput)
@@ -273,7 +373,19 @@ public class gdclass
 
         public CClassOutput FindOutput(string szName)
         {
+            int nCount = GetOutputCount();
 
+            for (int i = 0; i < nCount; i++)
+            {
+                CClassOutput pOutput = GetOutput(i);
+
+                if (string.Compare(pOutput.GetName().ToLower(), szName.ToLower()) == 0)
+                {
+                    return pOutput;
+                }
+            }
+
+            return null;
         }
 
         public int GetOutputCount()
@@ -283,7 +395,7 @@ public class gdclass
 
         public CClassOutput GetOutput(int nIndex)
         {
-
+            return m_Outputs.Element(nIndex);
         }
 
         public gamedata.GameData Parent;
@@ -384,9 +496,28 @@ public class gdclass
             return b_maxs;
         }
 
-        public bool GetBoundBox(Vector pfMins, Vector pfMaxs)
+        public bool GetBoundBox(out Vector pfMins, out Vector pfMaxs)
         {
+            if (m_bGotSize)
+            {
+                pfMins = new();
+                pfMaxs = new();
 
+                pfMins[0] = m_bmins[0];
+                pfMins[1] = m_bmins[1];
+                pfMins[2] = m_bmins[2];
+
+                pfMaxs[0] = m_bmaxs[0];
+                pfMaxs[1] = m_bmaxs[1];
+                pfMaxs[2] = m_bmaxs[2];
+
+                return m_bGotSize;
+            }
+
+            pfMins = null;
+            pfMaxs = null;
+
+            return m_bGotSize;
         }
 
         public bool HasBoundBox()
@@ -416,57 +547,412 @@ public class gdclass
 
         public CHelperInfo GetHelper(int nIndex)
         {
-
+            return m_Helpers.Element(nIndex);
         }
 
         protected bool ParseInput(TokenReader tr)
         {
+            string szToken = string.Empty;
 
+            if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.IDENT, "input"))
+            {
+                return false;
+            }
+
+            CClassInput pInput = new();
+
+            bool bReturn = ParseInputOutput(tr, out pInput);
+
+            if (bReturn)
+            {
+                AddInput(pInput);
+            }
+            else
+            {
+                pInput = null;
+            }
+
+            return bReturn;
         }
 
-        protected bool ParseInputOutput(TokenReader tr, CClassInputOutputBase pInputOutput)
+        protected bool ParseInputOutput(TokenReader tr, out CClassInputOutputBase pInputOutput)
         {
+            string szToken = string.Empty;
 
+            pInputOutput = new();
+
+            if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.IDENT))
+            {
+                pInputOutput = null;
+                return false;
+            }
+
+            pInputOutput.SetName(szToken);
+
+            if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.OPERATOR, "("))
+            {
+                pInputOutput = null;
+                return false;
+            }
+
+            if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.IDENT))
+            {
+                pInputOutput = null;
+                return false;
+            }
+
+            InputOutputType_t eType = pInputOutput.SetType(szToken);
+
+            if (eType == InputOutputType_t.iotInvalid)
+            {
+                gamedata.GDError(tr, "bad input/output type '{0}'", szToken);
+                pInputOutput = null;
+                return false;
+            }
+
+            if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.OPERATOR, ")"))
+            {
+                pInputOutput = null;
+                return false;
+            }
+
+            if ((tr.PeekTokenType(szToken, szToken.Length)) == trtoken_t.OPERATOR && (tokenreader.IsToken(szToken, ":")))
+            {
+                tr.NextToken(szToken, szToken.Length);
+
+                string pszDescription = string.Empty;
+
+                if (!gamedata.GDGetTokenDynamic(tr, pszDescription, trtoken_t.STRING))
+                {
+                    pInputOutput = null;
+                    return false;
+                }
+
+                pInputOutput.SetDescription(pszDescription);
+            }
+
+            return true;
         }
 
         protected bool ParseOutput(TokenReader tr)
         {
+            string szToken = string.Empty;
 
-        }
+            if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.IDENT, "output"))
+            {
+                return false;
+            }
 
-        protected bool ParseVariable(TokenReader tr)
-        {
+            CClassOutput pOutput = new();
 
+            bool bReturn = ParseInputOutput(tr, out pOutput);
+
+            if (bReturn)
+            {
+                AddOutput(pOutput);
+            }
+            else
+            {
+                pOutput = null;
+            }
+
+            return bReturn;
         }
 
         private bool ParseBase(TokenReader tr)
         {
+            string szToken = string.Empty;
 
+            while (true)
+            {
+                if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.IDENT))
+                {
+                    return false;
+                }
+
+                GDclass pBase = Parent.ClassForName(szToken);
+
+                if (pBase == null)
+                {
+                    gamedata.GDError(tr, "undefined base class '{0}'", szToken);
+                    return false;
+                }
+
+                AddBase(pBase);
+
+                if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.OPERATOR))
+                {
+                    return false;
+                }
+
+                if (tokenreader.IsToken(szToken, ")"))
+                {
+                    break;
+                }
+                else if (!tokenreader.IsToken(szToken, ","))
+                {
+                    gamedata.GDError(tr, "expecting ',' or ')', but found {0}", szToken);
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private bool ParseColor(TokenReader tr)
         {
+            string szToken = string.Empty;
 
+            if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.INTEGER))
+            {
+                return false;
+            }
+
+            byte r = atoi(szToken);
+
+            if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.INTEGER))
+            {
+                return false;
+            }
+
+            byte g = atoi(szToken);
+
+            if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.INTEGER))
+            {
+                return false;
+            }
+
+            byte b = atoi(szToken);
+
+            m_rgbColor.r = r;
+            m_rgbColor.g = g;
+            m_rgbColor.b = b;
+            m_rgbColor.a = 0;
+
+            m_bGotColor = true;
+
+            if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.OPERATOR, ")"))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private bool ParseHelper(TokenReader tr, string pszHelperName)
         {
+            string szToken = string.Empty;
 
+            CHelperInfo pHelper = new();
+            pHelper.SetName(pszHelperName);
+
+            bool bCloseParen = false;
+
+            while (!bCloseParen)
+            {
+                trtoken_t eType = tr.PeekTokenType(szToken, szToken.Length);
+
+                if (eType == trtoken_t.OPERATOR)
+                {
+                    if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.OPERATOR))
+                    {
+                        pHelper = null;
+                        return false;
+                    }
+
+                    if (tokenreader.IsToken(szToken, ")"))
+                    {
+                        bCloseParen = true;
+                    }
+                    else if (tokenreader.IsToken(szToken, "="))
+                    {
+                        pHelper = null;
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (!gamedata.GDGetToken(tr, szToken, szToken.Length, eType))
+                    {
+                        pHelper = null;
+                        return false;
+                    }
+                    else
+                    {
+                        pHelper.AddParameter(szToken);
+                    }
+                }
+            }
+
+            m_Helpers.AddToTail(pHelper);
+
+            return true;
         }
 
         private bool ParseSize(TokenReader tr)
         {
+            string szToken = string.Empty;
 
+            for (int i = 0; i < 3; i++)
+            {
+                if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.INTEGER))
+                {
+                    return false;
+                }
+
+                m_bmins[i] = (float)atof(szToken);
+            }
+
+            if (tr.PeekTokenType(szToken, szToken.Length) == trtoken_t.OPERATOR && tokenreader.IsToken(szToken, ","))
+            {
+                tr.NextToken(szToken, szToken.Length);
+
+                for (int i = 0; i < 3; i++)
+                {
+                    if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.INTEGER))
+                    {
+                        return false;
+                    }
+
+                    m_bmaxs[i] = (float)atof(szToken);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    float div2 = m_bmins[i] / 2;
+                    m_bmaxs[i] = div2;
+                    m_bmins[i] = -div2;
+                }
+            }
+
+            m_bGotSize = true;
+
+            if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.OPERATOR, ")"))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private bool ParseSpecifiers(TokenReader tr)
         {
+            string szToken = string.Empty;
 
+            while (tr.PeekTokenType() == trtoken_t.IDENT)
+            {
+                tr.NextToken(szToken, szToken.Length);
+
+                if (tokenreader.IsToken(szToken, "halfgridsnap"))
+                {
+                    m_bHalfGridSnap = true;
+                }
+                else
+                {
+                    if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "("))
+                    {
+                        return false;
+                    }
+
+                    if (tokenreader.IsToken(szToken, "base"))
+                    {
+                        if (!ParseBase(tr))
+                        {
+                            return false;
+                        }
+                    }
+                    else if (tokenreader.IsToken(szToken, "size"))
+                    {
+                        if (!ParseSize(tr))
+                        {
+                            return false;
+                        }
+                    }
+                    else if (tokenreader.IsToken(szToken, "color"))
+                    {
+                        if (!ParseColor(tr))
+                        {
+                            return false;
+                        }
+                    }
+                    else if (!ParseHelper(tr, szToken))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private bool ParseVariables(TokenReader tr)
         {
+            while (true)
+            {
+                string szToken = string.Empty;
 
+                if (tr.PeekTokenType(szToken, szToken.Length) == trtoken_t.OPERATOR)
+                {
+                    break;
+                }
+
+                if (string.Compare(szToken.ToLower(), "input") == 0)
+                {
+                    if (!ParseInput(tr))
+                    {
+                        return false;
+                    }
+
+                    continue;
+                }
+
+                if (string.Compare(szToken.ToLower(), "output") == 0)
+                {
+                    if (!ParseOutput(tr))
+                    {
+                        return false;
+                    }
+
+                    continue;
+                }
+
+                if (string.Compare(szToken.ToLower(), "key") == 0)
+                {
+                    gamedata.GDGetToken(tr, szToken, szToken.Length);
+                }
+
+                GDinputvariable var = new();
+
+                if (!var.InitFromTokens(tr))
+                {
+                    var = null;
+                    return false;
+                }
+
+                int nDupIndex;
+                GDinputvariable pDupVar = VarForName(var.GetName(), out nDupIndex);
+
+                if (pDupVar != null)
+                {
+                    if (pDupVar.GetType() != var.GetType())
+                    {
+                        string szError = string.Empty;
+                        int szErrorSize = stdlib._MAX_PATH;
+
+                        string.Format(szError, "{0}: variable '{1}' is multiply defined with different types.", GetName(), var.GetName());
+                        gamedata.GDError(tr, szError);
+                    }
+                }
+
+                if (!AddVariable(var, this, -1, m_Variables.Count()))
+                {
+                    var = null;
+                }
+            }
+
+            return true;
         }
     }
 }
