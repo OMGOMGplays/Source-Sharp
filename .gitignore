@@ -17,8 +17,6 @@ ipch
 *.sdf
 *.opensdf
 *.idb
-*.csproj
-*.sln
 
 # OSX/Linux build products
 *.mak
@@ -55,7 +53,6 @@ config.cfg
 *.tmp
 
 *.vpc.sentinel
-*.csproj*
 [Dd]ebug*/
 [Rr]elease*/
 *.pdb
