@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
-
-namespace FGDLib;
+﻿namespace FGDLib;
 
 public enum GDIV_TYPE
 {
@@ -43,17 +40,17 @@ public enum GDIV_TYPE
 
 public struct GDIVITEM
 {
-    public ulong iValue;
-    public string szValue;
-    public string szCaption;
-    public bool bDefault;
+    public ulong iValue { get; set; }
+    public string szValue { get; set; }
+    public string szCaption { get; set; }
+    public bool bDefault { get; set; }
 }
 
 public struct TypeMap_t
 {
-    public GDIV_TYPE eType;
-    public string pszName;
-    public trtoken_t eStoreAs;
+    public GDIV_TYPE eType { get; set; }
+    public string pszName { get; set; }
+    public trtoken_t eStoreAs { get; set; }
 }
 
 public class GDinputvariable
@@ -293,7 +290,7 @@ public class GDinputvariable
 
         if (m_eType == GDIV_TYPE.ivFlags)
         {
-            GDIVITEM ivi;
+            GDIVITEM ivi = new();
 
             while (true)
             {
@@ -306,8 +303,86 @@ public class GDinputvariable
 
                 gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.INTEGER);
                 szToken = string.Format(szToken + "{0}", ivi.iValue);
+
+                if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, ":"))
+                {
+                    return false;
+                }
+
+                if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.STRING))
+                {
+                    return false;
+                }
+
+                ivi.szCaption = szToken;
+
+                if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, ":"))
+                {
+                    return false;
+                }
+
+                if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.INTEGER))
+                {
+                    return false;
+                }
+
+                ivi.bDefault = atoi(szToken) == 0 ? true : false;
+
+                m_Items.AddToTail(ivi);
+            }
+
+            ulong nDefault = 0;
+
+            for (int i = 0; i < m_Items.Count(); i++)
+            {
+                if (m_Items[i].bDefault)
+                {
+                    nDefault |= m_Items[i].iValue;
+                }
+            }
+
+            m_nDefault = (int)nDefault;
+            m_szDefault = string.Format(m_szDefault + "{0} {1}", m_szDefault.Length, m_nDefault);
+        }
+        else if(m_eType == GDIV_TYPE.ivChoices)
+        {
+            GDIVITEM ivi = new();
+
+            while (true)
+            {
+                ttype = tr.PeekTokenType();
+
+                if ((ttype != trtoken_t.INTEGER) && (ttype != trtoken_t.STRING))
+                {
+                    break;
+                }
+
+                gamedata.GDGetToken(tr, szToken, szToken.Length, ttype);
+                ivi.iValue = 0;
+                ivi.szValue = szToken;
+
+                if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, ":"))
+                {
+                    return false;
+                }
+
+                if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.STRING))
+                {
+                    return false;
+                }
+
+                ivi.szCaption = szToken;
+
+                m_Items.AddToTail(ivi);
             }
         }
+
+        if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public string GetName()
@@ -415,37 +490,105 @@ public class GDinputvariable
 
     public string ItemStringForValue(string szValue)
     {
+        int nCount = m_Items.Count();
 
+        for (int i = 0; i < nCount; i++)
+        {
+            if (string.Compare(m_Items[i].szValue.ToLower(), szValue.ToLower()) == 0)
+            {
+                return m_Items[i].szCaption;
+            }
+        }
+
+        return null;
     }
 
     public string ItemValueForString(string szString)
     {
+        int nCount = m_Items.Count();
 
+        for (int i = 0; i < nCount; i++)
+        {
+            if (string.Compare(m_Items[i].szCaption, szString))
+            {
+                return m_Items[i].szValue;
+            }
+        }
+
+        return null;
     }
 
-    public bool IsFlagSet(uint flag)
+    public bool IsFlagSet(uint uCheck)
     {
-
+        Debug.Assert(m_eType == GDIV_TYPE.ivFlags);
+        return ((uint)m_nValue & uCheck) == uCheck ? true : false;
     }
 
-    public void SetFlag(uint flag, bool bSet)
+    public void SetFlag(uint uFlags, bool bSet)
     {
+        Debug.Assert(m_eType == GDIV_TYPE.ivFlags);
 
+        if (bSet)
+        {
+            m_nValue |= (int)uFlags;
+        }
+        else
+        {
+            m_nValue &= ~(int)uFlags;
+        }
     }
 
     public void ResetDefaults()
     {
+        if (m_eType == GDIV_TYPE.ivFlags)
+        {
+            m_nValue = 0;
 
+            int nCount = m_Items.Count();
+
+            for (int i = 0; i < nCount; i++)
+            {
+                if (m_Items[i].bDefault)
+                {
+                    m_nValue |= GetFlagMask(i);
+                }
+            }
+        }
+        else
+        {
+            m_nValue = m_nDefault;
+            m_szValue = m_szDefault;
+        }
     }
 
     public void ToKeyValue(MDkeyvalue pkv)
     {
+        pkv.szValue = m_szName;
 
+        trtoken_t eStoreAs = GetStoreAsFromType(m_eType);
+
+        if (eStoreAs == trtoken_t.STRING)
+        {
+            pkv.szValue = m_szValue;
+        }
+        else if (eStoreAs == trtoken_t.INTEGER)
+        {
+            itoa(m_nValue, pkv.szValue, 10);
+        }
     }
 
     public void FromKeyValue(MDkeyvalue pkv)
     {
+        trtoken_t eStoreAs = GetStoreAsFromType(m_eType);
 
+        if (eStoreAs == trtoken_t.STRING)
+        {
+            m_szValue = pkv.szValue;
+        }
+        else if (eStoreAs == trtoken_t.INTEGER)
+        {
+            m_nValue = atoi(pkv.szValue);
+        }
     }
 
     public bool IsReportable()
@@ -494,11 +637,38 @@ public class GDinputvariable
 
     public void Merge(GDinputvariable other)
     {
+        if (other.GetType() != GetType())
+        {
+            return;
+        }
 
+        bool bFound = false;
+        int nOurItems = m_Items.Count();
+
+        for (int i = 0; i < other.m_Items.Count(); i++)
+        {
+            GDIVITEM theirItem = other.m_Items[i];
+
+            for (int j = 0; j < nOurItems; j++)
+            {
+                GDIVITEM ourItem = m_Items[j];
+
+                if (theirItem.iValue == ourItem.iValue)
+                {
+                    bFound = true;
+                    break;
+                }
+            }
+
+            if (!bFound)
+            {
+                m_Items.AddToTail(theirItem);
+            }
+        }
     }
 
     public static string GetVarTypeName(GDIV_TYPE eType)
     {
-
+        return TypeMap[(int)eType].pszName;
     }
 }
