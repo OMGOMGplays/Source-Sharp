@@ -47,7 +47,7 @@ public class gamedata
 
     public static bool GDGetToken(TokenReader tr, string pszStore, int nSize, trtoken_t ttexpecting = trtoken_t.TOKENNONE, string pszExpecting = null)
     {
-        Assert(cond: pszStore != null);
+        Debug.Assert(pszStore != null);
 
         if (pszStore != null)
         {
@@ -131,7 +131,7 @@ public class gamedata
             GDError(tr, "expecting {0}", pszTokenName);
             return false;
         }
-        else if (bBadTokenType || (pszExpecting != null) && !IsToken(pszStore, pszExpecting))
+        else if (bBadTokenType || (pszExpecting != null) && !tokenreader.IsToken(pszStore, pszExpecting))
         {
             GDError(tr, "expecting '{0}', but found '{1}'", pszExpecting, pszStore);
             return false;
@@ -233,7 +233,7 @@ public class GameData
                 break;
             }
 
-            if (ttype != trtoken_t.OPERATOR || !IsToken(szToken, "@"))
+            if (ttype != trtoken_t.OPERATOR || !tokenreader.IsToken(szToken, "@"))
             {
                 if (!gamedata.GDError(tr, "expected @"))
                 {
@@ -249,8 +249,8 @@ public class GameData
                 }
             }
 
-            if (IsToken(szToken, "baseclass") || IsToken(szToken, "pointclass") || IsToken(szToken, "solidclass") || IsToken(szToken, "keyframeclass") ||
-                IsToken(szToken, "moveclass") || IsToken(szToken, "npcclass") || IsToken(szToken, "filterclass"))
+            if (tokenreader.IsToken(szToken, "baseclass") || tokenreader.IsToken(szToken, "pointclass") || tokenreader.IsToken(szToken, "solidclass") || tokenreader.IsToken(szToken, "keyframeclass") ||
+                tokenreader.IsToken(szToken, "moveclass") || tokenreader.IsToken(szToken, "npcclass") || tokenreader.IsToken(szToken, "filterclass"))
             {
                 GDclass pNewClass = new();
 
@@ -261,34 +261,34 @@ public class GameData
                 }
                 else
                 {
-                    if (IsToken(szToken, "baseclass"))
+                    if (tokenreader.IsToken(szToken, "baseclass"))
                     {
                         pNewClass.SetBaseClass(true);
                     }
-                    else if (IsToken(szToken, "pointclass"))
+                    else if (tokenreader.IsToken(szToken, "pointclass"))
                     {
                         pNewClass.SetPointClass(true);
                     }
-                    else if (IsToken(szToken, "solidclass"))
+                    else if (tokenreader.IsToken(szToken, "solidclass"))
                     {
                         pNewClass.SetSolidClass(true);
                     }
-                    else if (IsToken(szToken, "npcclass"))
+                    else if (tokenreader.IsToken(szToken, "npcclass"))
                     {
                         pNewClass.SetPointClass(true);
                         pNewClass.SetNPCClass(true);
                     }
-                    else if (IsToken(szToken, "filterclass"))
+                    else if (tokenreader.IsToken(szToken, "filterclass"))
                     {
                         pNewClass.SetPointClass(true);
                         pNewClass.SetFilterClass(true);
                     }
-                    else if (IsToken(szToken, "moveclass"))
+                    else if (tokenreader.IsToken(szToken, "moveclass"))
                     {
                         pNewClass.SetPointClass(true);
                         pNewClass.SetMoveClass(true);
                     }
-                    else if (IsToken(szToken, "keyframeclass"))
+                    else if (tokenreader.IsToken(szToken, "keyframeclass"))
                     {
                         pNewClass.SetKeyFrameClass(true);
                         pNewClass.SetPointClass(true);
@@ -308,7 +308,7 @@ public class GameData
                     }
                 }
             }
-            else if (IsToken(szToken, "include"))
+            else if (tokenreader.IsToken(szToken, "include"))
             {
                 if (GDGetToken(tr, szToken, szToken.Length, trtoken_t.STRING))
                 {
@@ -332,21 +332,21 @@ public class GameData
                     }
                 }
             }
-            else if (IsToken(szToken, "mapsize"))
+            else if (tokenreader.IsToken(szToken, "mapsize"))
             {
                 if (!ParseMapSize(tr))
                 {
                     tr.IgnoreTill(trtoken_t.OPERATOR, "@");
                 }
             }
-            else if (IsToken(szToken, "materialexclusion"))
+            else if (tokenreader.IsToken(szToken, "materialexclusion"))
             {
                 if (!LoadFGDMaterialExclusions(tr))
                 {
                     tr.IgnoreTill(trtoken_t.OPERATOR, "@");
                 }
             }
-            else if (IsToken(szToken, "autovisgroup"))
+            else if (tokenreader.IsToken(szToken, "autovisgroup"))
             {
                 if (!LoadFGDAutoVisGroups(tr))
                 {

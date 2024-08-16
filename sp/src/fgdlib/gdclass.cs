@@ -560,13 +560,13 @@ public class GDclass
             return false;
         }
 
-        CClassInput pInput = new();
+        CClassInputOutputBase pInput;
 
         bool bReturn = ParseInputOutput(tr, out pInput);
 
         if (bReturn)
         {
-            AddInput(pInput);
+            AddInput((CClassInput)pInput);
         }
         else
         {
@@ -644,13 +644,13 @@ public class GDclass
             return false;
         }
 
-        CClassOutput pOutput = new();
+        CClassInputOutputBase pOutput = new();
 
         bool bReturn = ParseInputOutput(tr, out pOutput);
 
         if (bReturn)
         {
-            AddOutput(pOutput);
+            AddOutput((CClassOutput)pOutput);
         }
         else
         {
@@ -932,8 +932,8 @@ public class GDclass
                 return false;
             }
 
-            int nDupIndex;
-            GDinputvariable pDupVar = VarForName(var.GetName(), out nDupIndex);
+            int nDupIndex = 0;
+            GDinputvariable pDupVar = VarForName(var.GetName(), nDupIndex);
 
             if (pDupVar != null)
             {
