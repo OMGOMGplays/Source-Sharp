@@ -8,6 +8,9 @@ global using System.Diagnostics;
 global using System.Collections.Generic;
 global using System.Runtime.InteropServices;
 
-// libs
+// Libraries
 global using FGDLib;
+global using Mathlib;
+
+// Misc. Workspaces
 global using Tier1;

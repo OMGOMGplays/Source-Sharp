@@ -2,7 +2,7 @@
 
 public class gamedata
 {
-    public static object GameDataMessageFunc_t(int level, PRINTF_FORMAT_STRING fmt, params object[] args)
+    public static object GameDataMessageFunc_t(int level, string fmt, params object[] args)
     {
         return null;
     }

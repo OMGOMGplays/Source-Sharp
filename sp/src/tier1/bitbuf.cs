@@ -102,7 +102,7 @@ public enum BitBufErrorType
 
 public class bf_write
 {
-    public ulong[] m_pData;
+    public IntPtr[] m_pData;
     public int m_nDataBytes;
     public int m_nDataBits;
 
@@ -145,7 +145,7 @@ public class bf_write
 
         nBytes &= ~3;
 
-        m_pData = (ulong[])pData;
+        m_pData = (IntPtr[])pData;
         m_nDataBytes = nBytes;
 
         if (nBits == -1)
@@ -209,11 +209,11 @@ public class bf_write
     {
         if (nValue != 0)
         {
-            m_pData[m_iCurBit >> 5] |= 1u << (m_iCurBit & 31);
+            m_pData[m_iCurBit >> 5] |= (IntPtr)(1u << (m_iCurBit & 31));
         }
         else
         {
-            m_pData[m_iCurBit >> 5] &= ~(1u << (m_iCurBit & 31));
+            m_pData[m_iCurBit >> 5] &= (IntPtr)~(1u << (m_iCurBit & 31));
         }
 
         ++m_iCurBit;
@@ -230,11 +230,11 @@ public class bf_write
 
         if (nValue != 0)
         {
-            m_pData[iBit >> 5] |= 1u << (iBit & 31);
+            m_pData[iBit >> 5] |= (IntPtr)(1u << (iBit & 31));
         }
         else
         {
-            m_pData[iBit >> 5] &= ~(1u << (iBit & 31));
+            m_pData[iBit >> 5] &= (IntPtr)~(1u << (iBit & 31));
         }
     }
 
@@ -264,7 +264,7 @@ public class bf_write
         m_iCurBit += numbits;
 
         Debug.Assert((iDWord * 4 + sizeof(long)) <= (uint)m_nDataBytes);
-        ulong pOut = m_pData[iDWord];
+        ulong pOut = (ulong)m_pData[iDWord];
 
         curData = (curData << iCurBitMasked) | (curData >> (32 - iCurBitMasked));
 
@@ -310,7 +310,7 @@ public class bf_write
 
     public bool WriteBits(object pInData, int nBits)
     {
-        string pOut = (string)pInData;
+        IntPtr pOut = (IntPtr)pInData;
         int nBitsLeft = nBits;
 
         if ((m_iCurBit + nBits) > m_nDataBits)
@@ -323,7 +323,7 @@ public class bf_write
         while (((ulong)pOut & 3) != 0 && nBitsLeft >= 8)
         {
             WriteUBitLong((uint)pOut, 8, false);
-            pOut += 1;
+            ++pOut;
             nBitsLeft -= 8;
         }
 
@@ -332,7 +332,7 @@ public class bf_write
             int numbytes = nBitsLeft >> 3;
             int numbits = numbytes << 3;
 
-            m_pData.ToString() + (m_iCurBit >> 3) = pOut;
+            m_pData[m_iCurBit >> 3] = pOut;
             pOut += numbytes;
             nBitsLeft -= numbits;
             m_iCurBit += numbits;
@@ -345,7 +345,7 @@ public class bf_write
             ulong bitMaskLeft = bitbuf.g_BitWriteMasks[iBitsRight, 32];
             ulong bitMaskRight = bitbuf.g_BitWriteMasks[0, iBitsRight];
 
-            ulong pData = m_pData[m_iCurBit >> 5];
+            ulong pData = (ulong)m_pData[m_iCurBit >> 5];
 
             while (nBitsLeft >= 32)
             {
@@ -372,7 +372,7 @@ public class bf_write
         while (nBitsLeft >= 8)
         {
             WriteUBitLong((uint)pOut, 8, false);
-            pOut += 1;
+            ++pOut;
             nBitsLeft -= 8;
         }
 
@@ -832,7 +832,7 @@ public class bf_write
 
     public void WriteLong(long val)
     {
-        WriteSBitLong(uint val, sizeof(long) << 3);
+        WriteSBitLong((int)val, sizeof(long) << 3);
     }
 
     public void WriteLongLong(long val)
@@ -857,13 +857,13 @@ public class bf_write
         return WriteBits(pBuf, nBytes << 3);
     }
 
-    public bool WriteString(string pStr)
+    public bool WriteString(IntPtr pStr)
     {
-        if (pStr != null)
+        if (pStr != 0)
         {
             do
             {
-                WriteChar(pStr);
+                WriteChar((int)pStr);
                 pStr += 1;
             } while ((pStr - 1) != 0);
         }
@@ -940,7 +940,7 @@ public class old_bf_write_static : bf_write
 
 public class bf_read
 {
-    public string m_pData;
+    public IntPtr[] m_pData;
     public int m_nDataBytes;
     public int m_nDataBits;
 
@@ -980,7 +980,7 @@ public class bf_read
     {
         Debug.Assert(((uint)pData & 3) == 0);
 
-        m_pData = (string)pData;
+        m_pData = (IntPtr[])pData;
         m_nDataBytes = nBytes;
 
         if (nBits == -1)
@@ -1023,7 +1023,7 @@ public class bf_read
         int endbit = startbit + bitstoremove;
         int remaining_to_end = m_nDataBits - endbit;
 
-        bf_write temp;
+        bf_write temp = new();
         temp.StartWriting(m_pData, m_nDataBits << 3, startbit);
     }
 
@@ -1086,13 +1086,13 @@ public class bf_read
 
     public void ReadBits(object pOutData, int nBits)
     {
-        string pOut = (string)pOutData;
+        IntPtr pOut = (IntPtr)pOutData;
         int nBitsLeft = nBits;
 
         while (((uint)pOut & 3) != 0 && nBitsLeft >= 8)
         {
-            pOut = ReadUBitLong(8).ToString();
-            pOut += 1;
+            pOut = (IntPtr)ReadUBitLong(8);
+            ++pOut;
             nBitsLeft -= 8;
         }
 
@@ -1100,7 +1100,7 @@ public class bf_read
         {
             while (nBitsLeft >= 32)
             {
-                pOut = ReadUBitLong(32).ToString();
+                pOut = (IntPtr)ReadUBitLong(32);
                 pOut += sizeof(ulong);
                 nBitsLeft -= 32;
             }
@@ -1108,14 +1108,14 @@ public class bf_read
 
         while (nBitsLeft >= 8)
         {
-            pOut = ReadUBitLong(8).ToString();
-            pOut += 1;
+            pOut = (IntPtr)ReadUBitLong(8);
+            ++pOut;
             nBitsLeft -= 8;
         }
 
         if (nBitsLeft != 0)
         {
-            pOut = ReadUBitLong(nBitsLeft).ToString();
+            pOut = (IntPtr)ReadUBitLong(nBitsLeft);
         }
     }
 
@@ -1151,7 +1151,7 @@ public class bf_read
 
         shift = (float)(bitbuf.BitForBitnum(numbits));
 
-        i = ReadUBitLong(numbits);
+        i = (int)ReadUBitLong(numbits);
         fReturn = (float)i * (360.0f / shift);
 
         return fReturn;
@@ -1177,8 +1177,8 @@ public class bf_read
 
         uint bitmask = (uint)(2 << (numbits - 1)) - 1;
 
-        uint dw1 = platform.LoadLittleDWord((ulong)m_pData, iWordOffset1) >> iStartBit;
-        uint dw2 = platform.LoadLittleDWord((ulong)m_pData, iWordOffset2) << (32 - iStartBit);
+        uint dw1 = platform.LoadLittleDWord(m_pData, iWordOffset1) >> iStartBit;
+        uint dw2 = platform.LoadLittleDWord(m_pData, iWordOffset2) << (32 - iStartBit);
 
         return (dw1 | dw2) & bitmask;
     }
@@ -1217,14 +1217,14 @@ public class bf_read
     public int ReadSBitLong(int numbits)
     {
         uint r = ReadUBitLong(numbits);
-        uint s = 1 << ((uint)numbits - 1);
+        uint s = (uint)(1 << (numbits - 1));
 
         if (r >= s)
         {
             r = r - s - s;
         }
 
-        return r;
+        return (int)r;
     }
 
     public uint ReadUBitVar()
@@ -1361,9 +1361,9 @@ public class bf_read
         {
             if ((flags & (int)RBCMP_enum.INTVAL) != 0)
             {
-                uint bits = ReadUBitLong((flags & (int)RBCMP_enum.INBOUNDS) != 0 ? coordsize.COORD_INTEGER_BITS_MP + 1 : coordsize.COORD_INTEGER_BITS + 1);
-                int intval = ((int)bits >> 1) + 1;
-                return (bits & 1) != 0 ? -intval : intval;
+                uint _bits = ReadUBitLong((flags & (int)RBCMP_enum.INBOUNDS) != 0 ? coordsize.COORD_INTEGER_BITS_MP + 1 : coordsize.COORD_INTEGER_BITS + 1);
+                int intval = ((int)_bits >> 1) + 1;
+                return (_bits & 1) != 0 ? -intval : intval;
             }
 
             return 0.0f;
@@ -1389,7 +1389,7 @@ public class bf_read
             coordsize.COORD_FRACTIONAL_BITS_MP_LOWPRECISION,
             coordsize.COORD_FRACTIONAL_BITS_MP_LOWPRECISION + coordsize.COORD_INTEGER_BITS,
             coordsize.COORD_FRACTIONAL_BITS_MP_LOWPRECISION + coordsize.COORD_INTEGER_BITS_MP,
-        }
+        };
 
         uint bits = ReadUBitLong(numbits_table[(flags & ((int)RBCMP_enum.INBOUNDS | (int)RBCMP_enum.INTVAL)) + (bLowPrecision ? 1 : 0) * 4]);
 
@@ -1618,7 +1618,7 @@ public class bf_read
 
     public long ReadLongLong()
     {
-        long retval;
+        long retval = 0;
         uint pLongs = (uint)retval;
 
         short endianIndex = 0x0100;
@@ -1654,7 +1654,7 @@ public class bf_read
 
         while (true)
         {
-            char val = ReadChar();
+            char val = (char)ReadChar();
 
             if (val == 0)
             {
@@ -1691,7 +1691,7 @@ public class bf_read
     {
         string str = string.Empty;
 
-        int nChars;
+        int nChars = 0;
         bool bOverflow = !ReadString(str, Marshal.SizeOf(str), false, nChars);
 
         if (pOverflow)
@@ -1714,9 +1714,54 @@ public class bf_read
         return ReadUBitLong(numbits) != other.ReadUBitLong(numbits);
     }
 
-    public int CompareBitsAt(int offset, bf_read other, int otherOffset, int bits)
+    public int CompareBitsAt(int offset, bf_read other, int otherOffset, int numbits)
     {
+        ulong[] g_ExtraMasks = new ulong[33];
 
+        if (numbits == 0)
+        {
+            return 0;
+        }
+
+        int overflow1 = offset + numbits > m_nDataBits ? 1 : 0;
+        int overflow2 = otherOffset + numbits > other.m_nDataBits ? 1 : 0;
+
+        int x = overflow1 | overflow2;
+
+        if (x != 0)
+        {
+            return x;
+        }
+
+        uint iStartBit1 = (uint)offset & 31u;
+        uint iStartBit2 = (uint)otherOffset & 31u;
+        ulong pData1 = (ulong)m_pData + (offset >> 5);
+        ulong pData2 = (ulong)other.m_pData + (otherOffset >> 5);
+        ulong pData1End = pData1 + (ulong)((offset + numbits - 1) >> 5);
+        ulong pData2End = pData2 + (ulong)((otherOffset + numbits - 1) >> 5);
+
+        while (numbits > 32)
+        {
+            x = platform.LoadLittleDWord(pData1, 0) >> iStartBit1;
+            x ^= platform.LoadLittleDWord(pData1, 1) << (32 - iStartBit1);
+            x ^= platform.LoadLittleDWord(pData2, 0) >> iStartBit2;
+            x ^= platform.LoadLittleDWord(pData2, 1) << (32 - iStartBit2);
+
+            if (x != 0)
+            {
+                return x;
+            }
+
+            ++pData1;
+            ++pData2;
+            numbits -= 32;
+        }
+
+        x = platform.LoadLittleDWord(pData1, 0) >> iStartBit1;
+        x ^= platform.LoadLittleDWord(pData1End, 0) << (32 - iStartBit1);
+        x ^= platform.LoadLittleDWord(pData2, 0) >> iStartBit2;
+        x ^= platform.LoadLittleDWord(pData2End, 0) << (32 - iStartBit2);
+        return x & (int)g_ExtraMasks[numbits];
     }
 
     public int GetNumBytesLeft()
