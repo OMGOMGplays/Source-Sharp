@@ -14,7 +14,7 @@ public class gamedata
         g_pMsgFunc = pFunc;
     }
 
-    public static bool GDError(TokenReader tr, PRINTF_FORMAT_STRING error, params object[] args)
+    public static bool GDError(TokenReader tr, string error, params object[] args)
     {
         string szBuf;
         Console.WriteLine(string.Format(error, args));
