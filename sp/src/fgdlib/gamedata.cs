@@ -183,6 +183,17 @@ public enum tRemapOperation
 
 public class GameData
 {
+    private CUtlVector<GDclass> m_Classes;
+
+    private int m_nMinMapCoord;
+    private int m_nMaxMapCoord;
+
+    private Vector m_InstanceOrigin;
+    private QAngle m_InstanceAngle;
+    private matrix4x3_t m_InstanceMat;
+    private string m_InstancePrefix;
+    private GDclass m_InstanceClass;
+
     public enum TNameFixup_e
     {
         NAME_FIXUP_PREFIX = 0,
@@ -639,7 +650,7 @@ public class GameData
     ///-----------------------------------------------------------------------------
     public bool LoadFGDMaterialExclusions(TokenReader tr)
     {
-        if (!GDSkipToken(tr, trtoken_t.OPERATOR, "["))
+        if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "["))
         {
             return false;
         }
@@ -654,7 +665,7 @@ public class GameData
             {
                 break;
             }
-            else if (GDGetToken(tr, szToken, szTokenSize, trtoken_t.STRING))
+            else if (gamedata.GDGetToken(tr, szToken, szTokenSize, trtoken_t.STRING))
             {
                 for (int i = 0; i < m_FGDMaterialExclusions.Count(); i++)
                 {
@@ -674,7 +685,7 @@ public class GameData
             }
         }
 
-        if (!GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
+        if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
         {
             return false;
         }
@@ -699,9 +710,9 @@ public class GameData
         string szToken = string.Empty;
         int szTokenSize = 128;
 
-        if (GDSkipToken(tr, trtoken_t.OPERATOR, "="))
+        if (gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "="))
         {
-            if (!GDGetToken(tr, szToken, szTokenSize, trtoken_t.STRING))
+            if (!gamedata.GDGetToken(tr, szToken, szTokenSize, trtoken_t.STRING))
             {
                 return false;
             }
@@ -709,7 +720,7 @@ public class GameData
             gindex = m_FGDAutoVisGroups.AddToTail();
             m_FGDAutoVisGroups[gindex].szParent = szToken;
 
-            if (!GDSkipToken(tr, trtoken_t.OPERATOR, "["))
+            if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "["))
             {
                 return false;
             }
@@ -717,12 +728,12 @@ public class GameData
 
         while (true)
         {
-            if (GDGetToken(tr, szToken, szTokenSize, trtoken_t.STRING))
+            if (gamedata.GDGetToken(tr, szToken, szTokenSize, trtoken_t.STRING))
             {
                 cindex = m_FGDAutoVisGroups[gindex].m_Classes.AddToTail();
                 m_FGDAutoVisGroups[gindex].m_Classes[cindex].szClass = szToken;
 
-                if (!GDSkipToken(tr, trtoken_t.OPERATOR, "["))
+                if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "["))
                 {
                     return false;
                 }
@@ -734,7 +745,7 @@ public class GameData
                         break;
                     }
 
-                    if (!GDGetToken(tr, szToken, szTokenSize, trtoken_t.STRING))
+                    if (!gamedata.GDGetToken(tr, szToken, szTokenSize, trtoken_t.STRING))
                     {
                         return false;
                     }
@@ -742,7 +753,7 @@ public class GameData
                     m_FGDAutoVisGroups[gindex].m_Classes[cindex].szEntities.CopyAndAddToTail(szToken);
                 }
 
-                if (!GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
+                if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
                 {
                     return false;
                 }
@@ -752,7 +763,7 @@ public class GameData
                     continue;
                 }
 
-                if (!GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
+                if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
                 {
                     return false;
                 }
@@ -761,14 +772,14 @@ public class GameData
             }
             else
             {
-                if (!GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
+                if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "]"))
                 {
                     return false;
                 }
             }
         }
 
-        GDError(tr, "Malformed AutoVisGroup -- Last Processed: {0}", szToken);
+        gamedata.GDError(tr, "Malformed AutoVisGroup -- Last Processed: {0}", szToken);
         return false;
     }
 
@@ -777,26 +788,26 @@ public class GameData
 
     private bool ParseMapSize(TokenReader tr)
     {
-        if (!GDSkipToken(tr, trtoken_t.OPERATOR, "("))
+        if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, "("))
         {
             return false;
         }
 
         string szToken = null;
 
-        if (!GDGetToken(tr, szToken, szToken.Length, trtoken_t.INTEGER))
+        if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.INTEGER))
         {
             return false;
         }
 
         int nMin = atoi(szToken);
 
-        if (!GDSkipToken(tr, trtoken_t.OPERATOR, ","))
+        if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, ","))
         {
             return false;
         }
 
-        if (!GDGetToken(tr, szToken, szToken.Length, trtoken_t.INTEGER))
+        if (!gamedata.GDGetToken(tr, szToken, szToken.Length, trtoken_t.INTEGER))
         {
             return false;
         }
@@ -809,22 +820,11 @@ public class GameData
             m_nMaxMapCoord = max(nMin, nMax);
         }
 
-        if (!GDSkipToken(tr, trtoken_t.OPERATOR, ")"))
+        if (!gamedata.GDSkipToken(tr, trtoken_t.OPERATOR, ")"))
         {
             return false;
         }
 
         return true;
     }
-
-    private CUtlVector<GDclass> m_Classes;
-
-    private int m_nMinMapCoord;
-    private int m_nMaxMapCoord;
-
-    private Vector m_InstanceOrigin;
-    private QAngle m_InstanceAngle;
-    private matrix4x3_t m_InstanceMat;
-    private string m_InstancePrefix;
-    private GDclass m_InstanceClass;
 }
