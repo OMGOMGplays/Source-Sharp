@@ -36,4 +36,29 @@ public static class sse
     {
 
     }
+
+    public static float _SSE_cos(float x)
+    {
+
+    }
+
+    public static void _SSE2_SinCos(float x, float s, float c)
+    {
+
+    }
+
+    public static float _SSE2_cos(float x)
+    {
+
+    }
+
+    public static void VectorTransformSSE(float in1, matrix3x4_t in2, float out1)
+    {
+
+    }
+
+    public static void VectorRotateSSE(float in1, matrix3x4_t in2, float out1)
+    {
+
+    }
 }
