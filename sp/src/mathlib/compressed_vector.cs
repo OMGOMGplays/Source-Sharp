@@ -543,7 +543,8 @@ public class Vector48
 
 public class Vector2d32
 {
-
+    public float16_with_assign x;
+    public float16_with_assign y;
 
     public Vector2d32()
     {
@@ -554,5 +555,35 @@ public class Vector2d32
     {
         x.SetFloat(X);
         y.SetFloat(Y);
+    }
+
+    public Vector2d32 Equals(Vector vOther)
+    {
+        x.SetFloat(vOther.x);
+        y.SetFloat(vOther.y);
+        return this;
+    }
+
+    public Vector2d32 Equals(Vector2D vOther)
+    {
+        x.SetFloat(vOther.x);
+        y.SetFloat(vOther.y);
+        return this;
+    }
+
+    public Vector2D _vector2d()
+    {
+        Vector2D tmp = new();
+
+        tmp.x = x.GetFloat();
+        tmp.y = y.GetFloat();
+
+        return tmp;
+    }
+
+    public void Init(float ix = 0.0f, float iy = 0.0f)
+    {
+        x.SetFloat(ix);
+        y.SetFloat(iy);
     }
 }
