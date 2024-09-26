@@ -1,6 +1,8 @@
-﻿using SourceSharp.SP.Public.Tier1;
-using System;
+﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+
+using SourceSharp.SP.Public.Tier1;
 
 namespace SourceSharp.SP.Common;
 
@@ -42,28 +44,82 @@ public class StudioByteSwap
 
     private static void WriteObjects<T>(ref byte[] outputBuffer, ref byte[] baseData, int objectCount = 1) where T : class
     {
+        if (outputBuffer == null || baseData == null)
+        {
+            throw new ArgumentNullException("Buffers cannot be null.");
+        }
+
         int objectSize = Marshal.SizeOf<T>();
+        if (baseData.Length < objectSize * objectCount || outputBuffer.Length < objectSize * objectCount)
+        {
+            throw new ArgumentException("Buffer sizes are insufficient for the object count.");
+        }
+
         int outputOffset = 0;
         int baseOffset = 0;
 
-        for (int i = 0; i < objectCount; ++i)
-        {
-            T tempObject = default;
-            nint tempPtr = Marshal.AllocHGlobal(objectSize);
+        nint tempPtr = Marshal.AllocHGlobal(objectSize);
 
-            try
+        try
+        {
+            for (int i = 0; i < objectCount; ++i)
             {
                 Marshal.Copy(baseData, baseOffset, tempPtr, objectSize);
-                tempObject = Marshal.PtrToStructure<T>(tempPtr);
+                T tempObject = Marshal.PtrToStructure<T>(tempPtr);
                 swap.SwapFieldsToTargetEndian(ref tempObject);
                 Marshal.StructureToPtr(tempObject, tempPtr, false);
                 Marshal.Copy(tempPtr, outputBuffer, outputOffset, objectSize);
                 outputOffset += objectSize;
                 baseOffset += objectSize;
             }
-            finally
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(tempPtr);
+        }
+    }
+
+    private static unsafe void WriteObjects<T>(ref byte outputBuffer, ref byte baseData, int objectCount = 1) where T : class
+    {
+        int objectSize = Marshal.SizeOf<T>();
+
+        // Pin the starting address of the byte data and use pointers for memory manipulation.
+        fixed (byte* basePtr = &baseData)
+        fixed (byte* outputPtr = &outputBuffer)
+        {
+            byte* currentBasePtr = basePtr;
+            byte* currentOutputPtr = outputPtr;
+
+            for (int i = 0; i < objectCount; ++i)
             {
-                Marshal.FreeHGlobal(tempPtr);
+                T tempObject;
+                nint tempPtr = Marshal.AllocHGlobal(objectSize);
+
+                try
+                {
+                    // Copy from base data memory to tempPtr (unmanaged memory).
+                    Buffer.MemoryCopy(currentBasePtr, (void*)tempPtr, objectSize, objectSize);
+
+                    // Read structure from tempPtr.
+                    tempObject = Marshal.PtrToStructure<T>(tempPtr);
+
+                    // Perform endian swap or other manipulation.
+                    swap.SwapFieldsToTargetEndian(ref tempObject);
+
+                    // Write the structure back to unmanaged memory.
+                    Marshal.StructureToPtr(tempObject, tempPtr, false);
+
+                    // Copy from tempPtr (unmanaged memory) to the output buffer.
+                    Buffer.MemoryCopy((void*)tempPtr, currentOutputPtr, objectSize, objectSize);
+
+                    // Advance the pointers by object size.
+                    currentBasePtr += objectSize;
+                    currentOutputPtr += objectSize;
+                }
+                finally
+                {
+                    Marshal.FreeHGlobal(tempPtr); // Free the unmanaged memory.
+                }
             }
         }
     }
@@ -81,29 +137,38 @@ public class StudioByteSwap
 
     private static void WriteObjects<T>(byte[] outputBuffer, byte[] baseData, int objectCount = 1) where T : class
     {
+        if (outputBuffer == null || baseData == null)
+        {
+            throw new ArgumentNullException("Buffers cannot be null.");
+        }
+
         int objectSize = Marshal.SizeOf<T>();
+        if (baseData.Length < objectSize * objectCount || outputBuffer.Length < objectSize * objectCount)
+        {
+            throw new ArgumentException("Buffer sizes are insufficient for the object count.");
+        }
+
         int outputOffset = 0;
         int baseOffset = 0;
 
-        for (int i = 0; i < objectCount; ++i)
-        {
-            T tempObject = default;
-            nint tempPtr = Marshal.AllocHGlobal(objectSize);
+        nint tempPtr = Marshal.AllocHGlobal(objectSize);
 
-            try
+        try
+        {
+            for (int i = 0; i < objectCount; ++i)
             {
                 Marshal.Copy(baseData, baseOffset, tempPtr, objectSize);
-                tempObject = Marshal.PtrToStructure<T>(tempPtr);
+                T tempObject = Marshal.PtrToStructure<T>(tempPtr);
                 swap.SwapFieldsToTargetEndian(ref tempObject);
                 Marshal.StructureToPtr(tempObject, tempPtr, false);
                 Marshal.Copy(tempPtr, outputBuffer, outputOffset, objectSize);
                 outputOffset += objectSize;
                 baseOffset += objectSize;
             }
-            finally
-            {
-                Marshal.FreeHGlobal(tempPtr);
-            }
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(tempPtr);
         }
     }
 
@@ -294,16 +359,167 @@ public class StudioByteSwap
         {
             ProcessFields(baseAddress, data, datamap.baseMap, pfnProcessFunc);
         }
+
+        TypeDescription fields = datamap.dataDesc;
+        int fieldCount = datamap.dataNumFields;
+
+        for (int i = 0; i < fieldCount; i++)
+        {
+            TypeDescription field = fields[i];
+            ProcessField(baseAddress, data + field.fieldOffset[TD_OFFSET_NORMAL], field, pfnProcessFunc);
+        }
     }
+
+    private void ProcessFields(nint data, DataMap datamap, DataDescProcessFunc pfnProcessFunc)
+    {
+        ProcessFields(data, data, datamap, pfnProcessFunc);
+    }
+
+    private void ProcessFieldByName(nint baseAddress, nint data, DataMap datamap, string name, DataDescProcessFunc pfnProcessFunc)
+    {
+        if (datamap.baseMap != null)
+        {
+            ProcessFieldByName(baseAddress, data, datamap.baseMap, pfnProcessFunc);
+        }
+
+        TypeDescription fields = datamap.dataDesc;
+        int fieldCount = datamap.dataNumFields;
+
+        for (int i = 0; i < fieldCount; i++)
+        {
+            TypeDescription field = fields[i];
+
+            if (field.fieldName == name)
+            {
+                ProcessField(baseAddress, data + field.fieldOffset[TD_OFFSET_NORMAL], field, pfnProcessFunc);
+                break;
+            }
+        }
+    }
+
+    private void ProcessFieldByName(nint data, DataMap datamap, string name, DataDescProcessFunc pfnProcessFunc)
+    {
+        ProcessFieldByName(data, data, datamap, name, pfnProcessFunc);
+    }
+
+    private delegate void ProcessANIFields(nint dataBase, DataDescProcessFunc pfnProcessFunc);
+    private delegate void ProcessMDLFields(nint dataBase, DataDescProcessFunc pfnProcessFunc);
 
     private int ByteswapStudioFile(string filename, nint outBase, nint fileBase, int filesize, StudioHDR hdr, CompressFunc compressFunc = null)
     {
 
     }
 
-    private int ByteswapPHY(nint outBase, nint fileBase, int filesize)
+    private int ByteswapPHY(nint destBase, nint srcBase, int fileSize)
     {
+        Debug.Assert(collision == null);
 
+        if (collision == null)
+        {
+            return 0;
+        }
+
+        destBase = fileSize;
+
+        byte src = (byte)srcBase;
+        byte dest = (byte)destBase;
+        VCollide collide = new { 0 };
+
+        PhyHeader hdr = (PhyHeader)(nativeSrc ? src : dest);
+        WriteObjects<PhyHeader>(ref dest, ref src);
+
+        if (nativeSrc)
+        {
+            src = (byte)srcBase + hdr.size;
+            dest = (byte)destBase + hdr.size;
+
+            int bufSize = fileSize - hdr.size;
+            collision.VCollideLoad(collide, hdr.solidCount, src.ToString(), bufSize, false);
+        }
+
+        for (int i = 0; i < hdr.solidCount; i++)
+        {
+            SwapCompactSurfaceHeader baseHdr = (SwapCompactSurfaceHeader)(nativeSrc ? src : dest);
+            WriteObjects<SwapCompactSurfaceHeader>(ref dest, ref src);
+
+            int srcIncrement = baseHdr.surfaceSize + Marshal.SizeOf<SwapCompactSurfaceHeader>();
+            int destIncrement = srcIncrement;
+            bool copyToSrc = !nativeSrc;
+
+            if (baseHdr.vphysicsID != MAKEID("V", "P", "H", "Y"))
+            {
+                LegacySurfaceHeader legacyHdr = (LegacySurfaceHeader)(nativeSrc ? src : dest);
+                WriteObjects<LegacySurfaceHeader>(ref dest, ref src);
+
+                if (legacyHdr.dummy[2] == MAKEID("I", "V", "P", "S") || legacyHdr.dummy[2] == 0)
+                {
+                    srcIncrement = legacyHdr.byte_size + sizeof(int);
+                    destIncrement = legacyHdr.byte_size + Marshal.SizeOf<SwapCompactSurfaceHeader>();
+                    copyToSrc = false;
+
+                    if (!nativeSrc)
+                    {
+                        src = dest;
+                    }
+                }
+                else
+                {
+                    Debug.Assert(false);
+                    return 0;
+                }
+            }
+
+            if (copyToSrc)
+            {
+                src = dest;
+            }
+
+            src += (byte)srcIncrement;
+            dest += (byte)destIncrement;
+        }
+
+        int currPos = src - (byte)srcBase;
+        int remainingBytes = fileSize - currPos;
+        WriteBuffer<char>(ref dest, ref src, remainingBytes);
+
+        if (!nativeSrc)
+        {
+            src = (byte)srcBase + hdr.size;
+            int bufSize = fileSize - hdr.size;
+            collision.VCollideLoad(collide, hdr.solidCount, src.ToString(), bufSize, true);
+        }
+
+        dest = (byte)destBase + hdr.size;
+
+        for (int i = 0; i < collide.solidCount; i++)
+        {
+            dest += sizeof(int);
+            int offset = collision.ColliderWrite(dest.ToString(), collide.solids[i], nativeSrc);
+            int destSize = nativeSrc ? SwapLong(offset) : offset;
+            destSize = dest - sizeof(int);
+            dest += (byte)offset;
+        }
+
+        collision.CollideUnload(ref collide);
+
+        int newFileSize = dest - (byte)destBase + remainingBytes;
+
+        if (compressFunc != null)
+        {
+            nint input = destBase;
+            int inputSize = newFileSize;
+            nint output;
+            int outputSize;
+
+            if (CompressFunc(input, inputSize, output, outputSize))
+            {
+                destBase = output;
+                output = null;
+                newFileSize = outputSize;
+            }
+        }
+
+        return newFileSize;
     }
 
     private int ByteswapANI(StudioHDR hdr, nint outBase, nint fileBase, int filesize)
@@ -325,4 +541,15 @@ public class StudioByteSwap
     {
 
     }
+}
+
+public struct SwapCompactSurfaceHeader
+{
+    public int size;
+    public int vphysicsID;
+    public short version;
+    public short modelType;
+    public int surfaceSize;
+    public Vector dragAxisAreas;
+    public int axisMapSize;
 }

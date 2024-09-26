@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 
-using Mathlib;
+using SourceSharp.SP.Public.Mathlib;
 
-namespace Raytrace;
+namespace SourceSharp.SP.Raytrace;
 
 public class FourRays
 {
@@ -134,7 +134,14 @@ public struct TriGeometryData
 
     public Vector Vertex(int idx)
     {
-        return (Vector)(vertexCoordData + 3 * idx);
+        Vector result = new Vector();
+
+        for (int i = 0; i < vertexCoordData.Length; i++)
+        {
+            result[i] = vertexCoordData[i] + 3 * idx;
+        }
+
+        return result;
     }
 }
 
@@ -154,7 +161,14 @@ public struct CacheOptimizedTriangle
 
     public Vector Vertex(int idx)
     {
-        return (Vector)(data.geometryData.vertexCoordData + 3 * idx);
+        Vector result = new Vector();
+
+        for (int i = 0; i < data.geometryData.vertexCoordData.Length; i++)
+        {
+            result[i] = data.geometryData.vertexCoordData[i] + 3 * idx;
+        }
+
+        return result;
     }
 
     public void ChangeIntoIntersectionFormat()
@@ -178,7 +192,7 @@ public struct CacheOptimizedTriangle
 
         for (int c = 1; c < 3; c++)
         {
-            if (fabs(n[c]) > fabs(n[drop_axis]))
+            if (MathF.Abs(n[c]) > MathF.Abs(n[drop_axis]))
             {
                 drop_axis = c;
             }
@@ -213,8 +227,8 @@ public struct CacheOptimizedTriangle
 
         for (int v = 1; v < 3; v++)
         {
-            minc = min(minc, Vertex(v)[split_plane]);
-            maxc = max(maxc, Vertex(v)[split_plane]);
+            minc = float.Min(minc, Vertex(v)[split_plane]);
+            maxc = float.Max(maxc, Vertex(v)[split_plane]);
         }
 
         if (minc >= split_value)
