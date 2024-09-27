@@ -1,9 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>public</RootNamespace>
     <AssemblyName>@public</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Configurations>Debug;Release;X360-Debug;X360-Release</Configurations>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='X360-Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);DEBUG;X360</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='X360-Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants);RELEASE;X360</DefineConstants>
   </PropertyGroup>
 </Project>

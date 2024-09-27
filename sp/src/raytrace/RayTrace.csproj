@@ -3,7 +3,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Configurations>Debug;Release;X360-Debug;X360-Release</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='X360-Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);DEBUG;X360</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='X360-Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants);RELEASE;X360</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\public\Public.csproj" />
+  </ItemGroup>
 </Project>

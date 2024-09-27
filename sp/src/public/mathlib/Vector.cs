@@ -5,9 +5,7 @@ namespace SourceSharp.SP.Public.Mathlib;
 
 public class Vector
 {
-    public static void CHECK_VALID(Vector v) { Debug.Assert(v.IsValid()); }
-    public static void CHECK_VALID(RadianEuler r) { Debug.Assert(r.IsValid()); }
-    public static void CHECK_VALID(QAngle q) { Debug.Assert(q.IsValid()); }
+    public static void CHECK_VALID(dynamic x) { Debug.Assert(x.IsValid()); }
 
     public const int X_INDEX = 0;
     public const int Y_INDEX = 1;
@@ -98,14 +96,18 @@ public class Vector
         }
     }
 
-    public float Base()
+    public float[] Base()
     {
-        return (float)this;
+        float[] array = [x, y, z];
+
+        return array;
     }
 
     public Vector2D AsVector2D()
     {
-        return (Vector2D)this;
+        Vector2D vector = new Vector2D(x, y);
+
+        return vector;
     }
 
     public void Random(float minVal, float maxVal)
@@ -808,9 +810,11 @@ public class ShortVector
         }
     }
 
-    public short Base()
+    public short[] Base()
     {
-        return (short)this;
+        short[] array = [x, y, z, w];
+
+        return array;
     }
 
     public static bool operator ==(ShortVector lhs, ShortVector rhs)
@@ -978,7 +982,9 @@ public class IntVector4D
 
     public int[] Base()
     {
-        return (int[])this;
+        int[] array = [x, y, z, w];
+
+        return array;
     }
 
     public static bool operator ==(IntVector4D lhs, IntVector4D rhs)
@@ -1219,7 +1225,9 @@ public class Quaternion
 
     public float[] Base()
     {
-        return (float[])this;
+        float[] array = [x, y, z, w];
+
+        return array;
     }
 
     public float this[int i]
@@ -1519,7 +1527,9 @@ public class QAngle
 
     public float[] Base()
     {
-        return (float[])this;
+        float[] array = [x, y, z];
+
+        return array;
     }
 
     public static bool operator ==(QAngle lhs, QAngle rhs)

@@ -277,11 +277,7 @@ public class Mathlib
     public static Vector vec3_invalid;
     public static int nanmask;
 
-    public static bool IS_NAN(float x) => ((int)x & nanmask) == nanmask;
-    public static bool IS_NAN(double x) => ((int)x & nanmask) == nanmask;
-    public static bool IS_NAN(int x) => (x & nanmask) == nanmask;
-    public static bool IS_NAN(short x) => (x & nanmask) == nanmask;
-    public static bool IS_NAN(long x) => (x & nanmask) == nanmask;
+    public static bool IS_NAN(dynamic x) => (x & nanmask) == nanmask;
 
     public static float DotProduct(float[] v1, float[] v2)
     {
@@ -575,7 +571,7 @@ public class Mathlib
 
 }
 
-enum MovementInfo
+enum RotationInfo
 {
     PITCH = 0,
     YAW,

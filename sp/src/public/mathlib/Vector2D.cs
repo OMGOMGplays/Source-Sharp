@@ -88,7 +88,9 @@ public class Vector2D
 
     public float[] Base()
     {
-        return (float[])this;
+        float[] array = [x, y];
+
+        return array;
     }
 
     public void Random(float minVal, float maxVal)
