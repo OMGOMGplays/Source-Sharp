@@ -2,8 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>SourceSharp.SP.Public</RootNamespace>
-    <AssemblyName>SourceSharp.SP.Public</AssemblyName>
+    <RootNamespace>public</RootNamespace>
+    <AssemblyName>@public</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Configurations>Debug;Release;X360-Debug;X360-Release</Configurations>
   </PropertyGroup>

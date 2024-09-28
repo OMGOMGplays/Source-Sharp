@@ -182,7 +182,7 @@ public class Vector
         return lhs;
     }
 
-    public static Vector operator *(Vector lhs, float rhs)
+    public static Vector operator *(Vector lhs, dynamic rhs)
     {
         lhs.x *= rhs;
         lhs.y *= rhs;
@@ -208,7 +208,7 @@ public class Vector
         return lhs;
     }
 
-    public static Vector operator /(Vector lhs, float rhs)
+    public static Vector operator /(Vector lhs, dynamic rhs)
     {
         Debug.Assert(rhs != 0.0f);
         float oo = 1.0f / rhs;
@@ -222,7 +222,7 @@ public class Vector
         return lhs;
     }
 
-    public static Vector operator +(Vector lhs, float rhs)
+    public static Vector operator +(Vector lhs, dynamic rhs)
     {
         lhs.x += rhs;
         lhs.y += rhs;
@@ -233,7 +233,7 @@ public class Vector
         return lhs;
     }
 
-    public static Vector operator -(Vector lhs, float rhs)
+    public static Vector operator -(Vector lhs, dynamic rhs)
     {
         lhs.x -= rhs;
         lhs.y -= rhs;
@@ -721,7 +721,7 @@ public class Vector
         dst = new QAngle(src.x, src.y, src.z);
     }
 
-    public static float VectorNormalize(Vector vector)
+    public static float VectorNormalize(ref Vector vector)
     {
         float sqrlen = vector.LengthSqr() + 1.0e-10f, invlen;
         invlen = MathF.Sqrt(sqrlen);
@@ -857,7 +857,7 @@ public class ShortVector
         return lhs;
     }
 
-    public static ShortVector operator *(ShortVector lhs, float rhs)
+    public static ShortVector operator *(ShortVector lhs, dynamic rhs)
     {
         lhs.x *= (short)rhs;
         lhs.y *= (short)rhs;
@@ -879,7 +879,7 @@ public class ShortVector
         return lhs;
     }
 
-    public static ShortVector operator /(ShortVector lhs, float rhs)
+    public static ShortVector operator /(ShortVector lhs, dynamic rhs)
     {
         Debug.Assert(rhs != 0.0f);
         float oo = 1.0f / rhs;
@@ -1027,7 +1027,7 @@ public class IntVector4D
         return lhs;
     }
 
-    public static IntVector4D operator *(IntVector4D lhs, float rhs)
+    public static IntVector4D operator *(IntVector4D lhs, dynamic rhs)
     {
         lhs.x *= (int)rhs;
         lhs.y *= (int)rhs;
@@ -1049,7 +1049,7 @@ public class IntVector4D
         return lhs;
     }
 
-    public static IntVector4D operator /(IntVector4D lhs, float rhs)
+    public static IntVector4D operator /(IntVector4D lhs, dynamic rhs)
     {
         Debug.Assert(rhs != 0.0f);
         float oo = 1.0f / rhs;
@@ -1453,7 +1453,7 @@ public class QAngle
         Vector.CHECK_VALID(this);
     }
 
-    public void Init(float x, float y, float z)
+    public void Init(float x = 0, float y = 0, float z = 0)
     {
         this.x = x;
         this.y = y;
@@ -1577,7 +1577,7 @@ public class QAngle
         return lhs;
     }
 
-    public static QAngle operator *(QAngle lhs, float rhs)
+    public static QAngle operator *(QAngle lhs, dynamic rhs)
     {
         lhs.x *= rhs;
         lhs.y *= rhs;
@@ -1587,7 +1587,7 @@ public class QAngle
         return lhs;
     }
 
-    public static QAngle operator /(QAngle lhs, float rhs)
+    public static QAngle operator /(QAngle lhs, dynamic rhs)
     {
         Debug.Assert(rhs != 0.0f);
         float oo = 1.0f / rhs;

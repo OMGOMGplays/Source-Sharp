@@ -4,8 +4,10 @@ using System.Runtime.InteropServices;
 
 namespace SourceSharp.SP.Public.Tier1;
 
-public class CUtlVector<T, A> where T : class where A : CUtlMemory<T>
+public class CUtlVector<T>
 {
+    public CUtlMemory<T> A;
+
     public CUtlMemory<T> CAllocator;
     public T ElemType;
     public T[] iterator;
@@ -72,12 +74,12 @@ public class CUtlVector<T, A> where T : class where A : CUtlMemory<T>
 
     public T begin()
     {
-        return Base();
+        return Base()[0];
     }
 
     public T end()
     {
-        return Base() + Count();
+        return Base()[Count()];
     }
 
     public T[] Base()
@@ -521,14 +523,14 @@ public class CUtlVector<T, A> where T : class where A : CUtlMemory<T>
     }
 }
 
-public class CUtlBlockVector<T> : CUtlVector<T, CUtlBlockMemory<T, int>> where T : class
+public class CUtlBlockVector<T> : CUtlVector<T>
 {
     public CUtlBlockVector(int growSize = 0, int initSize = 0) : base(growSize, initSize)
     {
 
     }
 
-    private CUtlVector<T, CUtlBlockMemory<T, int>> @base;
+    private CUtlVector<T> @base;
     //typename Base::iterator begin();
     //typename Base::const_iterator begin() const;
     //typename Base::iterator end();

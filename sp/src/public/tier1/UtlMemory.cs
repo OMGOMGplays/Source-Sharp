@@ -402,15 +402,17 @@ public class CUtlMemory<T>
     }
 }
 
-public class CUtlMemoryFixedGrowable<T, SIZE, I> : CUtlMemory<T>
+public class CUtlMemoryFixedGrowable<T> : CUtlMemory<T>
 {
+    private int size;
     private int mallocGrowSize;
-    private T[] fixedMemory = new T[SIZE];
+    private T[] fixedMemory;
 
-    public CUtlMemoryFixedGrowable(int growSize = 0, int initSize = SIZE)
+    public CUtlMemoryFixedGrowable(int growSize = 0, int initSize = 0)
     {
-        Debug.Assert(initSize == 0 || initSize == SIZE);
+        Debug.Assert(initSize == 0);
         mallocGrowSize = growSize;
+        size = initSize;
     }
 
     public override void Grow(int count = 1)
@@ -439,13 +441,16 @@ public class CUtlMemoryFixedGrowable<T, SIZE, I> : CUtlMemory<T>
     }
 }
 
-public class CUtlMemoryFixed<T, SIZE, ALIGNMENT>
+public class CUtlMemoryFixed<T>
 {
-    private char[] memory = new char[SIZE * Marshal.SizeOf<T>() + ALIGNMENT];
+    private readonly int SIZE;
+    private readonly int ALIGNMENT;
+    private char[] memory;
 
     public CUtlMemoryFixed(int growSize = 0, int initSize = 0)
     {
         Debug.Assert(initSize == 0 || initSize == SIZE);
+        memory = new char[SIZE * Marshal.SizeOf<T>() + ALIGNMENT];
     }
 
     public CUtlMemoryFixed(T[] memory, int numElements)
@@ -455,7 +460,7 @@ public class CUtlMemoryFixed<T, SIZE, ALIGNMENT>
 
     public bool IsIdxValid(int i)
     {
-        return (ulong)i < SIZE;
+        return i < SIZE;
     }
 
     public const int INVALID_INDEX = -1;
@@ -469,26 +474,33 @@ public class CUtlMemoryFixed<T, SIZE, ALIGNMENT>
     {
         if (ALIGNMENT == 0)
         {
-            return (T)memory[0];
+            T[] values = new T[memory.Length];
+
+            for (int i = 0; i < memory.Length; i++)
+            {
+                values[i] = Marshal.PtrToStructure<T>(memory[i]);
+            }
         }
         else
         {
-            return (T)AlignValue(memory[0], ALIGNMENT);
+            return (T)BaseTypes.AlignValue(memory[0], ALIGNMENT);
         }
+
+        return null;
     }
 
     public T this[int i]
     {
         get
         {
-            Debug.Assert((ulong)i < SIZE);
+            Debug.Assert(i < SIZE);
 
             return Base()[i];
         }
 
         set
         {
-            Debug.Assert((ulong)i < SIZE);
+            Debug.Assert(i < SIZE);
 
             Base()[i] = value;
         }
@@ -496,7 +508,7 @@ public class CUtlMemoryFixed<T, SIZE, ALIGNMENT>
 
     public T Element(int i)
     {
-        Debug.Assert((ulong)i < SIZE);
+        Debug.Assert(i < SIZE);
 
         return Base()[i];
     }
@@ -615,7 +627,7 @@ public class CUtlMemoryConservative<T>
     {
         if (memory != null)
         {
-            Marshal.FreeHGlobal(memory);
+            memory = null;
         }
     }
 
@@ -670,7 +682,7 @@ public class CUtlMemoryConservative<T>
 
     public ulong AllocSize()
     {
-        return memory != null ? memAlloc.GetSize(memory) : 0;
+        return memory != null ? (ulong)Marshal.SizeOf(memory) : 0;
     }
 
     public int NumAllocated()
@@ -685,7 +697,7 @@ public class CUtlMemoryConservative<T>
 
     public void ReAlloc(ulong sz)
     {
-        memory = (T)Marshal.ReAllocHGlobal(memory, (nint)sz);
+        memory = new T[sz];
         RememberAllocSize(sz);
     }
 
@@ -702,9 +714,8 @@ public class CUtlMemoryConservative<T>
 
     public void Purge()
     {
-        Marshal.FreeHGlobal(memory);
-        RememberAllocSize(0);
         memory = null;
+        RememberAllocSize(0);
     }
 
     public void Purge(int numElements)
@@ -777,8 +788,10 @@ public class CUtlMemoryConservative<T>
     }
 }
 
-public class CUtlMemoryAligned<T, ALIGNMENT> : CUtlMemory<T>
+public class CUtlMemoryAligned<T> : CUtlMemory<T>
 {
+    private readonly int ALIGNMENT;
+
     public CUtlMemoryAligned(int growSize = 0, int initSize = 0)
     {
         memory = null;
@@ -821,7 +834,7 @@ public class CUtlMemoryAligned<T, ALIGNMENT> : CUtlMemory<T>
 
     private nint Align(nint addr)
     {
-        uint alignmentMask = ALIGNMENT - 1;
+        uint alignmentMask = (uint)ALIGNMENT - 1;
 
         return (nint)(((uint)addr + alignmentMask) & ~alignmentMask);
     }

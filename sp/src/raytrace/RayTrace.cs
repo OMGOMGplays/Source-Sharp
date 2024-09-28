@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
+using SourceSharp.SP.Public.Tier1;
 using SourceSharp.SP.Public.Mathlib;
 
 namespace SourceSharp.SP.Raytrace;
@@ -350,12 +351,9 @@ public class RayStream
     }
 }
 
-public class ITransparentTriangleCallback
+public interface ITransparentTriangleCallback
 {
-    public virtual bool VisitTriangle_ShouldContinue(TriIntersectData triangle, FourRays rays, fltx4 b0, fltx4 b1, fltx4 b2, int hitID)
-    {
-        return false;
-    }
+    public bool VisitTriangle_ShouldContinue(TriIntersectData triangle, FourRays rays, fltx4 b0, fltx4 b1, fltx4 b2, int hitID);
 }
 
 public class RayTracingEnvironment
@@ -374,8 +372,8 @@ public class RayTracingEnvironment
 
     public RayTracingEnvironment()
     {
-        optimizedTriangleList = new(1024);
-        backgroundColor.DuplicateVector(new(1.0f, 0.0f, 0.0f));
+        optimizedTriangleList = new CUtlBlockVector<CacheOptimizedTriangle>(1024);
+        backgroundColor.DuplicateVector(new Vector(1.0f, 0.0f, 0.0f));
         flags = 0;
     }
 
@@ -389,5 +387,126 @@ public class RayTracingEnvironment
 
     }
 
+    public void AddQuad(int id, Vector v1, Vector v2, Vector v3, Vector v4, Vector color)
+    {
 
+    }
+
+    public void AddAxisAlignedRectangularSolid(int id, Vector minCoord, Vector maxCoord, Vector color)
+    {
+
+    }
+
+    public void SetupAccelerationStructure()
+    {
+
+    }
+
+    public void Trace4Rays(FourRays rays, fltx4 min, fltx4 max, int directionSignMask, out RayTracingResult rslt_out, int skip_id = -1, ITransparentTriangleCallback callback = null)
+    {
+
+    }
+
+    public void Trace4Rays(FourRays rays, fltx4 min, fltx4 max, out RayTracingResult rslt_out, int skip_id = -1, ITransparentTriangleCallback callback = null)
+    {
+
+    }
+
+    public void ComputeVirtualLightSources()
+    {
+
+    }
+
+    public void RenderScene(
+                            int width,
+                            int height,
+                            int stride,
+                            uint output_buffer,
+                            Vector cameraOrigin,
+                            Vector ulCorner,
+                            Vector urCorner,
+                            Vector llCorner,
+                            Vector lrCorner,
+                            RayTraceLightingMode lightmode = RayTraceLightingMode.DIRECT_LIGHTING)
+    {
+
+    }
+
+    public void AddToRayStream(ref RayStream s, Vector start, Vector end, out RayTracingSingleResult rslt_out)
+    {
+
+    }
+
+    public void FlushToStreamEntry(ref RayStream s, int msk)
+    {
+
+    }
+
+    public void FinishRayStream(ref RayStream s)
+    {
+
+    }
+
+    public int MakeLeafNode(int first_tri, int last_tri)
+    {
+
+    }
+
+    public float CalculateCostsOfSplit(
+                                        int split_plane, int[] tri_list, int numtris,
+                                        Vector minBound, Vector maxBound, float split_value,
+                                        int left, int right, int both)
+    {
+
+    }
+
+    public void RefineNode(int node_number, int[] tri_list, int numtris,
+                           Vector minBound, Vector maxBound, int depth)
+    {
+
+    }
+
+    public void CalculateTriangleListBounds(int[] tris, int numtris,
+                                            out Vector minOut, out Vector maxOut)
+    {
+
+    }
+
+    public void AddInfinitePointLight(Vector position, Vector intensity)
+    {
+
+    }
+
+    public void InitializeFromLoadedBSP()
+    {
+
+    }
+
+    public void AddBSPFace(int id, DFace face)
+    {
+
+    }
+
+    public void MakeRoomForTriangles(int numTriangles)
+    {
+        if ((flags & RTE_FLAGS_DONT_STORE_TRIANGLE_COLORS) == 0)
+        {
+
+        }
+    }
+
+    public CacheOptimizedTriangle GetTriangle(int triID)
+    {
+        return optimizedTriangleList[triID];
+    }
+
+    public int GetTriangleMaterial(int triID)
+    {
+        return triangleMaterials[triID];
+    }
+
+    public Vector GetTriangleColor(int triID)
+    {
+        return triangleColors[triID];
+    }
 }
