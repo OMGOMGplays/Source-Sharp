@@ -92,7 +92,7 @@ public class CUtlVector<T>
         return size;
     }
 
-    [Obsolete]
+    [Obsolete("Deprecated! Use UtlVector.Count() instead.")]
     public int Size()
     {
         return size;
@@ -169,10 +169,10 @@ public class CUtlVector<T>
 
     public int AddMultipleToHead(int num)
     {
-        return InsertMultipleBefore(0);
+        return InsertMultipleBefore(0, num);
     }
 
-    public int AddMultipleToTail(int num, T toCopy = null)
+    public int AddMultipleToTail(int num, T toCopy = default)
     {
         Debug.Assert(Base() == null || toCopy == null || toCopy + num < Base() || toCopy >= (Base() + Count()));
 
@@ -249,7 +249,7 @@ public class CUtlVector<T>
         }
     }
 
-    public void Swap(CUtlVector<T, A> vector)
+    public void Swap(CUtlVector<T> vector)
     {
         memory.Swap(vector.memory);
         //V_swap(size, vector.size);
@@ -257,7 +257,7 @@ public class CUtlVector<T>
         //V_swap(elements, vector.elements);
     }
 
-    public int AddVectorToTail(CUtlVector<T, A> src)
+    public int AddVectorToTail(CUtlVector<T> src)
     {
         Debug.Assert(src != this);
 
@@ -517,7 +517,7 @@ public class CUtlVector<T>
         elements = Base();
     }
 
-    private CUtlVector(CUtlVector<T, A> vector)
+    private CUtlVector(CUtlVector<T> vector)
     {
 
     }
@@ -537,7 +537,7 @@ public class CUtlBlockVector<T> : CUtlVector<T>
     //typename Base::const_iterator end() const;
 }
 
-public class CUtlVectorMT<BASE_UTLVECTOR, MUTEX_TYPE> : BASE_UTLVECTOR where BASE_UTLVECTOR : class where MUTEX_TYPE : class, CThreadFastMutex
+public class CUtlVectorMT<BASE_UTLVECTOR, MUTEX_TYPE>
 {
     public MUTEX_TYPE mutex;
 
@@ -552,7 +552,7 @@ public class CUtlVectorMT<BASE_UTLVECTOR, MUTEX_TYPE> : BASE_UTLVECTOR where BAS
     }
 }
 
-public class CUtlVectorFixed<T, MAX_SIZE> : CUtlVector<T, CUtlMemoryFixed<T, MAX_SIZE>> where T : class
+public class CUtlVectorFixed<T, MAX_SIZE> : CUtlVector<T>
 {
     public CUtlVectorFixed(int growSize = 0, int initSize = 0) : base(growSize, initSize)
     {
@@ -565,7 +565,7 @@ public class CUtlVectorFixed<T, MAX_SIZE> : CUtlVector<T, CUtlMemoryFixed<T, MAX
     }
 }
 
-public class CUtlVectorFixedGrowable<T, MAX_SIZE> : CUtlVector<T, CUtlMemoryFixed<T, MAX_SIZE>> where T : class
+public class CUtlVectorFixedGrowable<T, MAX_SIZE> : CUtlVector<T>
 {
     public CUtlVectorFixedGrowable(int growSize = 0) : base(growSize, MAX_SIZE)
     {
@@ -573,7 +573,7 @@ public class CUtlVectorFixedGrowable<T, MAX_SIZE> : CUtlVector<T, CUtlMemoryFixe
     }
 }
 
-public class CUtlVectorConservative<T> : CUtlVector<T, CUtlMemoryConservative<T>> where T : class
+public class CUtlVectorConservative<T> : CUtlVector<T>
 {
     public CUtlVectorConservative(int growSize = 0, int initSize = 0) : base(growSize, initSize)
     {
@@ -835,19 +835,19 @@ public class CUtlVectorUltraConservative<T, A> where A : CUtlVectorUltraConserva
     }
 }
 
-public class CCopyableVector<T, A> : CUtlVector<T, A> where T : class where A : CUtlMemory<T>
+public class CCopyableVector<T> : CUtlVector<T>
 {
     public CCopyableVector(int growSize = 0, int initSize = 0) : base(growSize, initSize) { }
     public CCopyableVector(T[] memory, int numElements) : base(memory, numElements) { }
     ~CCopyableVector() { }
 
-    public CCopyableVector(CCopyableVector<T, A> vector)
+    public CCopyableVector(CCopyableVector<T> vector)
     {
         CopyArray(vector.Base(), vector.Count());
     }
 }
 
-public class CUtlVectorAutoPurge<T> : CUtlVector<T, CUtlMemory<T, int>> where T : class
+public class CUtlVectorAutoPurge<T> : CUtlVector<T>
 {
     ~CUtlVectorAutoPurge()
     {
@@ -885,7 +885,7 @@ public class CUtlStringList : CUtlVectorAutoPurge<string>
     }
 }
 
-public class CSplitString : CUtlVector<string, CUtlMemory<string, int>>
+public class CSplitString : CUtlVector<string>
 {
     private string buffer;
 

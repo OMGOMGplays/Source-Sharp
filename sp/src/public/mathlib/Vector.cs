@@ -280,7 +280,7 @@ public class Vector
     public Vector Normalized()
     {
         Vector norm = this;
-        VectorNormalize(norm);
+        VectorNormalize(ref norm);
         return norm;
     }
 
@@ -435,7 +435,7 @@ public class Vector
     public static void VectorMultiply(Vector a, float b, out Vector result)
     {
         CHECK_VALID(a);
-        Debug.Assert(DataTypes.IsFinite(b));
+        Debug.Assert(BaseTypes.IsFinite(b));
 
         result = new Vector(a.x * b, a.y * b, a.z * b);
     }
@@ -719,6 +719,17 @@ public class Vector
         CHECK_VALID(src);
 
         dst = new QAngle(src.x, src.y, src.z);
+    }
+
+    public static float VectorNormalize(Vector vector)
+    {
+        float sqrlen = vector.LengthSqr() + 1.0e-10f, invlen;
+        invlen = MathF.Sqrt(sqrlen);
+        vector.x *= invlen;
+        vector.y *= invlen;
+        vector.z *= invlen;
+
+        return sqrlen * invlen;
     }
 
     public static float VectorNormalize(ref Vector vector)

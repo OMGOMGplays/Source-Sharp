@@ -197,7 +197,7 @@ public class CScratchPadGraph
         Vector dir = tip - baseCenter;
         Vector.VectorNormalize(ref dir);
 
-        Vector right, up;
+        Vector right = new Vector(), up = new Vector();
         Mathlib.Mathlib.VectorVectors(dir, right, up);
         right *= baseWidth;
         up *= baseWidth;
@@ -252,7 +252,7 @@ public class CScratchPadGraph
         Vector dir = v2 - v1;
         Vector.VectorNormalize(ref dir);
 
-        Vector right, up;
+        Vector right = new Vector(), up = new Vector();
         Mathlib.Mathlib.VectorVectors(dir, right, up);
         right *= width;
         up *= width;
@@ -268,7 +268,7 @@ public class CScratchPadGraph
         float dot = -lightDir.Dot(dir);
         Vector topColor, bottomColor;
 
-        Vector.VectorLerp(darkColor, brightColor, RemapVal(dot, -1, 1, 0, 1), out topColor);
+        Vector.VectorLerp(darkColor, brightColor, RemapVal( dot, -1, 1, 0, 1), out topColor   );
         Vector.VectorLerp(darkColor, brightColor, RemapVal(-dot, -1, 1, 0, 1), out bottomColor);
 
         Vector prevTop = v1 + right;
@@ -419,9 +419,9 @@ public class CScratchPadGraph
             top.x = bottom.x = vecs[vertOrder[i, 0]].x;
             top.y = bottom.y = vecs[vertOrder[i, 1]].y;
 
-            pad.DrawLine(new CSPVert(prevTop, new CSPColor(color)), new CSPVert(top, new CSPColor(color)));
+            pad.DrawLine(new CSPVert(prevTop   , new CSPColor(color)), new CSPVert(top   , new CSPColor(color)));
             pad.DrawLine(new CSPVert(prevBottom, new CSPColor(color)), new CSPVert(bottom, new CSPColor(color)));
-            pad.DrawLine(new CSPVert(top, new CSPColor(color)), new CSPVert(bottom, new CSPColor(color)));
+            pad.DrawLine(new CSPVert(top       , new CSPColor(color)), new CSPVert(bottom, new CSPColor(color)));
 
             prevTop = top;
             prevBottom = bottom;
