@@ -1,4 +1,6 @@
-﻿namespace SourceSharp.SP.Public.Engine;
+﻿using SourceSharp.SP.Public.Mathlib;
+
+namespace SourceSharp.SP.Public.Engine;
 
 public interface ICollideable
 {
