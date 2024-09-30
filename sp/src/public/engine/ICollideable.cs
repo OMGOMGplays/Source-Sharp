@@ -1,15 +1,5 @@
 ﻿namespace SourceSharp.SP.Public.Engine;
 
-public enum SolidType;
-public class IHandleEntity;
-public struct Ray;
-public struct Model;
-public class Vector;
-public class QAngle;
-public class CGameTrace;
-public class Trace : CGameTrace;
-public class IClientUnknown;
-
 public interface ICollideable
 {
     public IHandleEntity GetEntityHandle();
