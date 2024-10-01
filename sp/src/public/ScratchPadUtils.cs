@@ -1,5 +1,5 @@
 ﻿using SourceSharp.SP.Public.Tier1;
-using SourceSharp.SP.Public.Mathlib;
+using SourceSharp.SP.Mathlib;
 
 using System;
 

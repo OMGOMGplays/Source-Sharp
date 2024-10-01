@@ -1,4 +1,4 @@
-﻿using SourceSharp.SP.Public.Mathlib;
+﻿using SourceSharp.SP.Mathlib;
 using SourceSharp.SP.Public.Tier1;
 
 namespace SourceSharp.SP.Public.Engine;

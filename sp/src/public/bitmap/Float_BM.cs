@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-using SourceSharp.SP.Public.Mathlib;
+using SourceSharp.SP.Mathlib;
 
 namespace SourceSharp.SP.Public.Bitmap;
 

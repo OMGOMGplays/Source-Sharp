@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 
-using SourceSharp.SP.Public.Tier1;
-using SourceSharp.SP.Public.Mathlib;
+using SourceSharp.SP.Tier1;
+using SourceSharp.SP.Mathlib;
 
 namespace SourceSharp.SP.Raytrace;
 

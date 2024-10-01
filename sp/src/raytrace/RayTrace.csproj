@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Configurations>Debug;Release;X360-Debug;X360-Release</Configurations>
@@ -14,6 +14,6 @@
     <DefineConstants>$(DefineConstants);RELEASE;X360</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\public\Public.csproj" />
+    <ProjectReference Include="..\mathlib\Mathlib.csproj" />
   </ItemGroup>
 </Project>

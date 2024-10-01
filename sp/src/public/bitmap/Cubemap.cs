@@ -1,6 +1,6 @@
 ﻿using System;
 
-using SourceSharp.SP.Public.Mathlib;
+using SourceSharp.SP.Mathlib;
 
 namespace SourceSharp.SP.Public.Bitmap;
 
