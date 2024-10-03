@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace SourceSharp.SP.Public.Tier1;
+namespace SourceSharp.SP.Tier1;
 
 public class CUtlVector<T>
 {

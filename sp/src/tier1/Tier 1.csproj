@@ -7,4 +7,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Configurations>Debug;Release;X360-Release;X360-Debug</Configurations>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\mathlib\Mathlib.csproj" />
+  </ItemGroup>
 </Project>

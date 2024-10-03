@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SourceSharp.SP.Mathlib;
 
-namespace SourceSharp.SP.Public.Tier1;
+namespace SourceSharp.SP.Tier1;
 
 public struct CharacterSet;
 
