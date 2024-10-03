@@ -5,5 +5,6 @@
     <RootNamespace>serverplugin_sample</RootNamespace>
     <AssemblyName>serverplugin_sample</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Configurations>Debug;Release;X360-Release;X360-Debug</Configurations>
   </PropertyGroup>
 </Project>

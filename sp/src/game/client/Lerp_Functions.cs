@@ -54,7 +54,15 @@ public static class Lerp_Functions
         return output;
     }
 
-    public static void Lerp_Clamp(dynamic val)
+    public static void Lerp_Clamp(ref dynamic val)
+    {
+    }
+
+    public static void Lerp_Clamp(ref float val)
+    {
+    }
+
+    public static void Lerp_Clamp(ref int val)
     {
     }
 
@@ -67,6 +75,61 @@ public static class Lerp_Functions
 
     public static QAngle Lerp_Hermite(float t, QAngle p0, QAngle p1, QAngle p2)
     {
+        return Mathlib.Mathlib.Lerp(t, p1, p2);
+    }
 
+    public static dynamic LoopingLerp_Hermite(float t, dynamic p0, dynamic p1, dynamic p2)
+    {
+        return Lerp_Hermite(t, p0, p1, p2);
+    }
+
+    public static float LoopingLerp_Hermite(float t, float p0, float p1, float p2)
+    {
+        if (MathF.Abs(p1 - p0) > 0.5f)
+        {
+            if (p0 < p1)
+            {
+                p0 += 1.0f;
+            }
+            else
+            {
+                p1 += 1.0f;
+            }
+        }
+
+        if (MathF.Abs(p2 - p1) > 0.5f)
+        {
+            if (p1 < p2)
+            {
+                p1 += 1.0f;
+
+                if (Math.Abs(p1 - p0) > 0.5f)
+                {
+                    if (p0 < p1)
+                    {
+                        p0 += 1.0f;
+                    }
+                    else
+                    {
+                        p1 += 1.0f;
+                    }
+                }
+            }
+            else
+            {
+                p2 += 1.0f;
+            }
+        }
+
+        float s = Lerp_Hermite(t, p0, p1, p2);
+
+        s = s - (int)s;
+
+        if (s < 0.0f)
+        {
+            s = s + 1.0f;
+        }
+
+        return s;
     }
 }

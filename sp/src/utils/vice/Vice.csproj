@@ -4,5 +4,6 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>vice</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Configurations>Debug;Release;X360-Release;X360-Debug</Configurations>
   </PropertyGroup>
 </Project>

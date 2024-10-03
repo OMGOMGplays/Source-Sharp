@@ -4,5 +4,6 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>tgadiff</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Configurations>Debug;Release;X360-Release;X360-Debug</Configurations>
   </PropertyGroup>
 </Project>

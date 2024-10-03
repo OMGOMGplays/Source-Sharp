@@ -5,5 +5,6 @@
     <RootNamespace>stdshaders</RootNamespace>
     <AssemblyName>stdshaders</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Configurations>Debug;Release;X360-Release;X360-Debug</Configurations>
   </PropertyGroup>
 </Project>
