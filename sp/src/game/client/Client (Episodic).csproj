@@ -9,5 +9,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\mathlib\Mathlib.csproj" />
+    <ProjectReference Include="..\..\tier1\Tier 1.csproj" />
   </ItemGroup>
 </Project>

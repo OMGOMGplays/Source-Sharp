@@ -114,7 +114,7 @@ public class C_BaseEntity : IClientEntity
     public byte oldInterpolationFrame;
 
     private int effects;
-    private byte renderMode;
+    private RenderMode renderMode;
     private byte oldRenderMode;
 
     public ClientRenderHandle render;
@@ -245,7 +245,7 @@ public class C_BaseEntity : IClientEntity
     private Vector networkOrigin;
     private QAngle networkAngles;
 
-    private int flags;
+    private EntityFlags flags;
 
     private int collisionGroup;
 
@@ -297,9 +297,25 @@ public class C_BaseEntity : IClientEntity
     protected Color32 previousRenderColor;
 #endif // TF_CLIENT
 
+    public static ConVar cl_extrapolate = new ConVar("cl_extrapolate", "1", FCVAR_CHEAT, "Enable/disable extrapolation if interpolation history runs out.");
+
     public void cc_cl_interp_all_changed(IConVar conVar, string oldString, float oldValue)
     {
+        ConVarRef var = new ConVarRef(conVar);
 
+        if (var.GetInt())
+        {
+            C_BaseEntityIterator iterator;
+            C_BaseEntity ent;
+
+            while ((ent = iterator.Next()) != null)
+            {
+                if (ent.ShouldInterpolate())
+                {
+                    ent.AddToInterpolationList();
+                }
+            }
+        }
     }
 
     public C_BaseEntity()
@@ -519,12 +535,12 @@ public class C_BaseEntity : IClientEntity
 
     public void SetToolHandle(uint handle)
     {
-
+        toolHandle = handle;
     }
 
     public uint GetToolHandle()
     {
-
+        return toolHandle;
     }
 
     public void EnableInToolView(bool enable)
@@ -534,7 +550,7 @@ public class C_BaseEntity : IClientEntity
 
     public bool IsEnabledInToolView()
     {
-
+        return enabledInToolView;
     }
 
     public void SetToolRecording(bool recording)
@@ -564,7 +580,7 @@ public class C_BaseEntity : IClientEntity
 
     public bool ShouldRecordInTools()
     {
-
+        return recordInTools;
     }
 
     public virtual void Release()
@@ -649,7 +665,7 @@ public class C_BaseEntity : IClientEntity
 
     public virtual Model GetModel()
     {
-
+        return model;
     }
 
     public virtual int DrawModel(int flags)
@@ -779,22 +795,22 @@ public class C_BaseEntity : IClientEntity
 
     public void AddEFlags(int eFlagMask)
     {
-
+        eFlags |= eFlagMask;
     }
 
     public void RemoveEFlags(int eFlagMask)
     {
-
+        eFlags &= ~eFlagMask;
     }
 
     public bool IsEFlagSet(int eFlagMask)
     {
-
+        return (eFlags & eFlagMask) != 0;
     }
 
     public bool IsMarkedForDeletion()
     {
-
+        return (flags & EntityFlags.EFL_KILLME) != 0;
     }
 
     public virtual int entindex()
@@ -844,17 +860,17 @@ public class C_BaseEntity : IClientEntity
 
     public VarMapping GetVarMapping()
     {
-
+        return varMap;
     }
 
     public CCollisionProperty CollisionProp()
     {
-
+        return collision;
     }
 
     public CParticleProperty ParticleProp()
     {
-
+        return particles;
     }
 
     public bool IsFloating()
@@ -999,12 +1015,12 @@ public class C_BaseEntity : IClientEntity
 
     public Vector GetNetworkOrigin()
     {
-
+        return networkOrigin;
     }
 
     public QAngle GetNetworkAngles()
     {
-
+        return networkAngles;
     }
 
     public void SetNetworkOrigin(Vector org)
@@ -1084,7 +1100,7 @@ public class C_BaseEntity : IClientEntity
 
     public int GetModelIndex()
     {
-
+        return modelIndex;
     }
 
     public void SetModelIndex(int index)
@@ -1099,17 +1115,21 @@ public class C_BaseEntity : IClientEntity
 
     public virtual Vector WorldAlignMins()
     {
-
+        Debug.Assert(!CollisionProp().IsBoundsDefinedInEntitySpace());
+        Debug.Assert(CollisionProp().GetCollisionAngles() == Mathlib.Mathlib.vec3_angle);
+        return CollisionProp().OBBMins();
     }
 
     public virtual Vector WorldAlignMaxs()
     {
-
+        Debug.Assert(!CollisionProp().IsBoundsDefinedInEntitySpace());
+        Debug.Assert(CollisionProp().GetCollisionAngles() == Mathlib.Mathlib.vec3_angle);
+        return CollisionProp().OBBMaxs();
     }
 
     public void SetCollisionBounds(Vector mins, Vector maxs)
     {
-
+        CollisionProp().SetCollisionBounds(mins, maxs);
     }
 
     public virtual Vector WorldSpaceCenter()
@@ -1119,17 +1139,19 @@ public class C_BaseEntity : IClientEntity
 
     public Vector WorldAlignSize()
     {
-
+        Debug.Assert(!CollisionProp().IsBoundsDefinedInEntitySpace());
+        Debug.Assert(CollisionProp().GetCollisionAngles() == Mathlib.Mathlib.vec3_angle);
+        return CollisionProp().OBBSize();
     }
 
     public bool IsPointSized()
     {
-
+        return CollisionProp().BoundingRadius() == 0.0f;
     }
 
     public float BoundingRadius()
     {
-
+        return CollisionProp().BoundingRadius();
     }
 
     public virtual void ComputeWorldSpaceSurroundingBox(Vector worldMins, Vector worldMaxs)
@@ -1139,17 +1161,37 @@ public class C_BaseEntity : IClientEntity
 
     public Matrix3x4 EntityToWorldTransform()
     {
-
+        Debug.Assert(absQueriesValid);
+        CalcAbsolutePosition();
+        return coordinateFrame;
     }
 
     public void EntityToWorldSpace(Vector @in, out Vector @out)
     {
-
+        if (GetAbsAngles() == Mathlib.Mathlib.vec3_angle)
+        {
+            Vector.VectorAdd(@in, GetAbsOrigin(), out @out);
+        }
+        else
+        {
+            float[] inArray = [@in.x, @in.y, @in.z];
+            Mathlib.Mathlib.VectorTransform(inArray, EntityToWorldTransform(), out float[] outArray);
+            @out = new Vector(outArray[0], outArray[1], outArray[2]);
+        }
     }
 
     public void WorldToEntitySpace(Vector @in, out Vector @out)
     {
-
+        if (GetAbsAngles() == Mathlib.Mathlib.vec3_angle)
+        {
+            Vector.VectorSubtract(@in, GetAbsOrigin(), out @out);
+        }
+        else
+        {
+            float[] inArray = [@in.x, @in.y, @in.z];
+            Mathlib.Mathlib.VectorITransform(inArray, EntityToWorldTransform(), out float[] outArray);
+            @out = new Vector(outArray[0], outArray[1], outArray[2]);
+        }
     }
 
     public Matrix3x4 GetParentWorldTransform(Matrix3x4 tempMatrix)
@@ -1209,37 +1251,37 @@ public class C_BaseEntity : IClientEntity
 
     public virtual SolidType GetSolid()
     {
-
+        return CollisionProp().GetSolid();
     }
 
     public virtual int GetSolidFlags()
     {
-
+        return CollisionProp().GetSolidFlags();
     }
 
     public bool IsSolidFlagSet(int flagMask)
     {
-
+        return CollisionProp().IsSolidFlagSet(flagMask);
     }
 
     public void SetSolidFlags(int flags)
     {
-
+        CollisionProp().SetSolidFlags(flags);
     }
 
     public void AddSolidFlags(int flags)
     {
-
+        CollisionProp().AddSolidFlags(flags);
     }
 
     public void RemoveSolidFlags(int flags)
     {
-
+        CollisionProp().RemoveSolidFlags(flags);
     }
 
     public bool IsSolid()
     {
-
+        return CollisionProp().IsSolid();
     }
 
     public virtual CMouthInfo GetMouth()
@@ -1504,7 +1546,7 @@ public class C_BaseEntity : IClientEntity
 
     public C_BaseEntity GetMoveParent()
     {
-
+        return moveParent;
     }
 
     public C_BaseEntity GetRootMoveParent()
@@ -1514,12 +1556,12 @@ public class C_BaseEntity : IClientEntity
 
     public C_BaseEntity FirstMoveChild()
     {
-
+        return moveChild;
     }
 
     public C_BaseEntity NextMovePeer()
     {
-
+        return movePeer;
     }
 
     public ClientEntityHandle GetClientHandle()
@@ -1529,7 +1571,7 @@ public class C_BaseEntity : IClientEntity
 
     public bool IsServerEntity()
     {
-
+        return index != -1;
     }
 
     public virtual RenderGroup GetRenderGroup()
@@ -1987,7 +2029,7 @@ public class C_BaseEntity : IClientEntity
 
     public char GetParentAttachment()
     {
-
+        return parentAttachment;
     }
 
     public bool HasDataObjectType(int type)
@@ -2404,18 +2446,18 @@ public class C_BaseEntity : IClientEntity
 
     public void SetFriction(float friction)
     {
-
+        this.friction = friction;
     }
 
 
     public void SetGravity(float gravity)
     {
-
+        this.gravity = gravity;
     }
 
     public float GetGravity()
     {
-
+        return gravity;
     }
 
     public void SetModelByIndex(int modelIndex)
@@ -2445,7 +2487,7 @@ public class C_BaseEntity : IClientEntity
 
     public void SetSolid(SolidType val)
     {
-
+        CollisionProp().SetSolid(val);
     }
 
     public void SetLocalVelocity(Vector velocity)
@@ -2460,12 +2502,14 @@ public class C_BaseEntity : IClientEntity
 
     public Vector GetLocalVelocity()
     {
-
+        return velocity;
     }
 
     public Vector GetAbsVelocity()
     {
-
+        Debug.Assert(absQueriesValid);
+        CalcAbsoluteVelocity();
+        return absVelocity;
     }
 
     public void ApplyLocalVelocityImpulse(Vector impulse)
@@ -2490,17 +2534,17 @@ public class C_BaseEntity : IClientEntity
 
     public QAngle GetLocalAngularVelocity()
     {
-
+        return angVelocity;
     }
 
     public Vector GetBaseVelocity()
     {
-
+        return baseVelocity;
     }
 
     public void SetBaseVelocity(Vector velocity)
     {
-
+        baseVelocity = velocity;
     }
 
     public virtual Vector GetViewOffset()
@@ -2516,22 +2560,22 @@ public class C_BaseEntity : IClientEntity
 #if SIXENSE
     public Vector GetEyeOffset()
     {
-
+        return eyeOffset;
     }
 
     public void SetEyeOffset(Vector offset)
     {
-
+        eyeOffset = offset;
     }
 
     public QAngle GetEyeAngleOffset()
     {
-
+        return eyeAngleOffset;
     }
 
     public void SetEyeAngleOffset(QAngle offset)
     {
-
+        eyeAngleOffset = offset;
     }
 #endif // SIXENSE
 
@@ -2542,7 +2586,7 @@ public class C_BaseEntity : IClientEntity
 
     public ClientRenderHandle GetRenderHandle()
     {
-
+        return render;
     }
 
     public void SetRemovalFlag(bool remove)
@@ -2746,7 +2790,7 @@ public class C_BaseEntity : IClientEntity
 
     }
 
-    public ENTITYFUNCPTR TouchSet(ENTITYFUNCPTR func, string name)
+    public ENTITYFUNCPTR TouchSet(C_BaseEntity func, string name)
     {
         touch = func;
         return func;
@@ -2775,7 +2819,7 @@ public class C_BaseEntity : IClientEntity
 
     public virtual ClientRenderHandle RenderHandle()
     {
-
+        return render;
     }
 
     public void CreateModelInstance()
@@ -2896,7 +2940,7 @@ public class C_BaseEntity : IClientEntity
 
     public static C_BaseEntity Instance(IClientEntity ent)
     {
-
+        return ent != null ? ent.GetBaseEntity() : null;
     }
 
     public static C_BaseEntity Instance(CBaseHandle ent)
@@ -2906,17 +2950,17 @@ public class C_BaseEntity : IClientEntity
 
     public static bool IsServer()
     {
-
+        return false;
     }
 
     public static bool IsClient()
     {
-
+        return true;
     }
 
     public static string GetDLLType()
     {
-
+        return "client";
     }
 
     public static void SetAbsQueriesValid(bool enable)
@@ -2956,37 +3000,39 @@ public class C_BaseEntity : IClientEntity
 
     public Color32 GetRenderColor()
     {
-
+        return clrRender.Get();
     }
 
     public void SetRenderColor(byte r, byte g, byte b)
     {
-
+        Color32 clr = new Color32(r, g, b, clrRender.a);
+        clrRender = clr;
     }
 
     public void SetRenderColor(byte r, byte g, byte b, byte a)
     {
-
+        Color32 clr = new Color32(r, g, b, a);
+        clrRender = clr;
     }
 
     public void SetRenderColorR(byte r)
     {
-
+        SetRenderColor(r, GetRenderColor().g, GetRenderColor().b);
     }
 
     public void SetRenderColorG(byte g)
     {
-
+        SetRenderColor(GetRenderColor().r, g, GetRenderColor().b);
     }
 
     public void SetRenderColorB(byte b)
     {
-
+        SetRenderColor(GetRenderColor().r, GetRenderColor().g, b);
     }
 
     public void SetRenderColorA(byte a)
     {
-
+        SetRenderColor(GetRenderColor().r, GetRenderColor().g, GetRenderColor().b, a);
     }
 
     public void SetRenderMode(RenderMode renderMode, bool forceUpdate = false)
@@ -2996,17 +3042,17 @@ public class C_BaseEntity : IClientEntity
 
     public RenderMode GetRenderMode()
     {
-
+        return renderMode;
     }
 
     public static bool IsInterpolationEnabled()
     {
-
+        return interpolate;
     }
 
     public bool IsNoInterpolationFrame()
     {
-
+        return oldInterpolationFrame != interpolationFrame;
     }
 
     public virtual bool OnPredictedEntityRemove(bool isbeingremoved, C_BaseEntity predicted)
@@ -3031,12 +3077,12 @@ public class C_BaseEntity : IClientEntity
 
     public int GetWaterLevel()
     {
-        
+        return waterLevel;
     }
 
     public void SetWaterLevel(int level)
     {
-
+        waterLevel = level;
     }
 
     public int GetWaterType()
@@ -3051,7 +3097,7 @@ public class C_BaseEntity : IClientEntity
 
     public float GetElasticity()
     {
-
+        return elasticity;
     }
 
     public int GetTextureFrameIndex()
@@ -3347,4 +3393,26 @@ public class C_BaseEntity : IClientEntity
 
         return string.Compare(entity.GetClassname(), classname) == 0 ? true : false;
     }
+
+    public void SetThink(object a)
+    {
+        ThinkSet((C_BaseEntity)a, 0, null);
+    }
+
+    public void SetContextThink(object a, object b, string context)
+    {
+        ThinkSet((C_BaseEntity)a, (float)b, context);
+    }
+
+#if DEBUG
+    public void SetTouch(object a)
+    {
+        TouchSet((C_BaseEntity)a, a.ToString());
+    }
+#else
+    public void SetTouch(object a)
+    {
+        touch = Touch;
+    }
+#endif // DEBUG
 }
