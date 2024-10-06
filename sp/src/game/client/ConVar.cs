@@ -230,6 +230,17 @@ public class ConCommand : ConCommandBase
 {
     public ConCommandBase BaseClass;
 
+    private CommandCallbackVoid commandCallbackV1;
+    private CommandCallback commandCallback;
+    private ICommandCallback iCommandCallback;
+
+    private CommandCompletionCallback completionCallback;
+    private ICommandCompletionCallback iCompletionCallback;
+
+    private bool hasCompletionCallback = true;
+    private bool usingNewCommandCallback = true;
+    private bool usingCommandCallbackInterface = true;
+
     public ConCommand(string name, CommandCallbackVoid callback, string helpString = null, int flags = 0, CommandCompletionCallback completionFunc = null)
     {
 
@@ -269,6 +280,164 @@ public class ConCommand : ConCommandBase
     {
 
     }
+}
 
+public class ConVar : ConCommandBase, IConVar
+{
+    public ConCommandBase BaseClass;
 
+    public ConVar(string name, string defaultValue, int flags = 0)
+    {
+
+    }
+
+    public ConVar(string name, string defaultValue, int flags, string helpString)
+    {
+
+    }
+
+    public ConVar(string name, string defaultValue, int flags, string helpString, bool min, float minVal, bool max, float maxVal)
+    {
+
+    }
+
+    public ConVar(string name, string defaultValue, int flags, string helpString, ChangeCallback callback)
+    {
+
+    }
+
+    public ConVar(string name, string defaultValue, int flags, string helpString, bool min, float minVal, bool max, float maxVal, ChangeCallback callback)
+    {
+
+    }
+
+    ~ConVar()
+    {
+
+    }
+
+    public override bool IsFlagSet(int flag)
+    {
+
+    }
+
+    public override string GetHelpText()
+    {
+
+    }
+
+    public override bool IsRegistered()
+    {
+
+    }
+
+    public override string GetName()
+    {
+
+    }
+
+    public override void AddFlags(int flags)
+    {
+
+    }
+
+    public override bool IsCommand()
+    {
+
+    }
+
+    public void InstallChangeCallback(ChangeCallback callback)
+    {
+
+    }
+
+    public float GetFloat()
+    {
+
+    }
+
+    public int GetInt()
+    {
+
+    }
+
+    public bool GetBool()
+    {
+        return GetInt() != 0;
+    }
+
+    public string GetString()
+    {
+
+    }
+
+    public virtual void SetValue(string value)
+    {
+
+    }
+
+    public virtual void SetValue(float value)
+    {
+
+    }
+
+    public virtual void SetValue(int value)
+    {
+
+    }
+
+    public void Revert()
+    {
+
+    }
+
+    public bool GetMin(float minVal)
+    {
+
+    }
+
+    public bool GetMax(float maxVal)
+    {
+
+    }
+
+    public string GetDefault()
+    {
+
+    }
+
+    public void SetDefault(string newDefault)
+    {
+
+    }
+
+    protected virtual void InternalSetValue(string value)
+    {
+
+    }
+
+    protected virtual void InternalSetFloatValue(float value)
+    {
+
+    }
+
+    protected virtual void InternalSetIntValue(int value)
+    {
+
+    }
+
+    protected virtual bool ClampValue(ref float value)
+    {
+
+    }
+
+    protected virtual void ChangeStringValue(string tempVal, float oldValue)
+    {
+
+    }
+
+    protected virtual void Create(string name, string defaultValue, int flags = 0, string helpString = null, bool min = false, float minVal = 0, bool max = false, float maxVal = 0, ChangeCallback callback = null)
+    {
+
+    }
 }
