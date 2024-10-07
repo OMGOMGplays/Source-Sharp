@@ -22,7 +22,7 @@ public class CUtlMemory<T>
         allocationCount = initAllocationSize;
 
         ValidateGrowSize();
-        Debug.Assert(growSize >= 0);
+        Dbg.Assert(growSize >= 0);
 
         if (allocationCount != 0)
         {
@@ -54,7 +54,7 @@ public class CUtlMemory<T>
         this.growSize = growSize;
         allocationCount = initSize;
         ValidateGrowSize();
-        Debug.Assert(growSize >= 0);
+        Dbg.Assert(growSize >= 0);
 
         if (allocationCount != null)
         {
@@ -116,16 +116,16 @@ public class CUtlMemory<T>
     {
         get
         {
-            Debug.Assert(growSize != (int)ExternalBufferMarkers.EXTERNAL_CONST_BUFFER_MARKER);
-            Debug.Assert((uint)i < (uint)allocationCount);
+            Dbg.Assert(growSize != (int)ExternalBufferMarkers.EXTERNAL_CONST_BUFFER_MARKER);
+            Dbg.Assert((uint)i < (uint)allocationCount);
 
             return memory[i];
         }
 
         set
         {
-            Debug.Assert(growSize != (int)ExternalBufferMarkers.EXTERNAL_CONST_BUFFER_MARKER);
-            Debug.Assert((uint)i < (uint)allocationCount);
+            Dbg.Assert(growSize != (int)ExternalBufferMarkers.EXTERNAL_CONST_BUFFER_MARKER);
+            Dbg.Assert((uint)i < (uint)allocationCount);
 
             memory[i] = value;
         }
@@ -133,8 +133,8 @@ public class CUtlMemory<T>
 
     public T Element(int i)
     {
-        Debug.Assert(growSize != (int)ExternalBufferMarkers.EXTERNAL_CONST_BUFFER_MARKER);
-        Debug.Assert((uint)i < (uint)allocationCount);
+        Dbg.Assert(growSize != (int)ExternalBufferMarkers.EXTERNAL_CONST_BUFFER_MARKER);
+        Dbg.Assert((uint)i < (uint)allocationCount);
 
         return memory[i];
     }
@@ -152,7 +152,7 @@ public class CUtlMemory<T>
 
     public T[] Base()
     {
-        Debug.Assert(!IsReadOnly());
+        Dbg.Assert(!IsReadOnly());
         return memory;
     }
 
@@ -214,11 +214,11 @@ public class CUtlMemory<T>
 
     public virtual void Grow(int num = 1)
     {
-        Debug.Assert(num > 0);
+        Dbg.Assert(num > 0);
 
         if (IsExternallyAllocated())
         {
-            Debug.Assert(false);
+            Dbg.Assert(false);
             return;
         }
 
@@ -236,7 +236,7 @@ public class CUtlMemory<T>
             {
                 if (allocationRequested != allocationRequested)
                 {
-                    Debug.Assert(false);
+                    Dbg.Assert(false);
                     return;
                 }
 
@@ -252,12 +252,12 @@ public class CUtlMemory<T>
         if (memory != null)
         {
             memory = new T[allocationCount * Marshal.SizeOf<T>()];
-            Debug.Assert(memory != null);
+            Dbg.Assert(memory != null);
         }
         else
         {
             memory = new T[allocationCount * Marshal.SizeOf<T>()];
-            Debug.Assert(memory != null);
+            Dbg.Assert(memory != null);
         }
     }
 
@@ -270,7 +270,7 @@ public class CUtlMemory<T>
 
         if (IsExternallyAllocated())
         {
-            Debug.Assert(false);
+            Dbg.Assert(false);
             return;
         }
 
@@ -297,11 +297,11 @@ public class CUtlMemory<T>
 
     public void Purge(int numElements)
     {
-        Debug.Assert(numElements >= 0);
+        Dbg.Assert(numElements >= 0);
 
         if (numElements > allocationCount)
         {
-            Debug.Assert(numElements <= allocationCount);
+            Dbg.Assert(numElements <= allocationCount);
             return;
         }
 
@@ -323,7 +323,7 @@ public class CUtlMemory<T>
 
         if (memory == null)
         {
-            Debug.Assert(memory != null);
+            Dbg.Assert(memory != null);
             return;
         }
 
@@ -344,8 +344,8 @@ public class CUtlMemory<T>
 
     public void SetGrowSize(int size)
     {
-        Debug.Assert(!IsExternallyAllocated());
-        Debug.Assert(size >= 0);
+        Dbg.Assert(!IsExternallyAllocated());
+        Dbg.Assert(size >= 0);
 
         growSize = size;
         ValidateGrowSize();
@@ -410,7 +410,7 @@ public class CUtlMemoryFixedGrowable<T> : CUtlMemory<T>
 
     public CUtlMemoryFixedGrowable(int growSize = 0, int initSize = 0)
     {
-        Debug.Assert(initSize == 0);
+        Dbg.Assert(initSize == 0);
         mallocGrowSize = growSize;
         size = initSize;
     }
@@ -449,13 +449,13 @@ public class CUtlMemoryFixed<T>
 
     public CUtlMemoryFixed(int growSize = 0, int initSize = 0)
     {
-        Debug.Assert(initSize == 0 || initSize == SIZE);
+        Dbg.Assert(initSize == 0 || initSize == SIZE);
         memory = new char[SIZE * Marshal.SizeOf<T>() + ALIGNMENT];
     }
 
     public CUtlMemoryFixed(T[] memory, int numElements)
     {
-        Debug.Assert(false);
+        Dbg.Assert(false);
     }
 
     public bool IsIdxValid(int i)
@@ -493,14 +493,14 @@ public class CUtlMemoryFixed<T>
     {
         get
         {
-            Debug.Assert(i < SIZE);
+            Dbg.Assert(i < SIZE);
 
             return Base()[i];
         }
 
         set
         {
-            Debug.Assert(i < SIZE);
+            Dbg.Assert(i < SIZE);
 
             Base()[i] = value;
         }
@@ -508,14 +508,14 @@ public class CUtlMemoryFixed<T>
 
     public T Element(int i)
     {
-        Debug.Assert(i < SIZE);
+        Dbg.Assert(i < SIZE);
 
         return Base()[i];
     }
 
     public void SetExternalBuffer(T[] memory, int numElements)
     {
-        Debug.Assert(false);
+        Dbg.Assert(false);
     }
 
     public int NumAllocated()
@@ -530,12 +530,12 @@ public class CUtlMemoryFixed<T>
 
     public void Grow(int num = 1)
     {
-        Debug.Assert(false);
+        Dbg.Assert(false);
     }
 
     public void EnsureCapacity(int num)
     {
-        Debug.Assert(num <= SIZE);
+        Dbg.Assert(num <= SIZE);
     }
 
     public void Purge()
@@ -545,7 +545,7 @@ public class CUtlMemoryFixed<T>
 
     public void Purge(int numElements)
     {
-        Debug.Assert(false);
+        Dbg.Assert(false);
     }
 
     public bool IsExternallyAllocated()
@@ -620,7 +620,7 @@ public class CUtlMemoryConservative<T>
 
     public CUtlMemoryConservative(T[] memory, int numElements)
     {
-        Debug.Assert(false);
+        Dbg.Assert(false);
     }
 
     ~CUtlMemoryConservative()
@@ -650,14 +650,14 @@ public class CUtlMemoryConservative<T>
     {
         get
         {
-            Debug.Assert(IsIdxValid(i));
+            Dbg.Assert(IsIdxValid(i));
 
             return Base()[i];
         }
 
         set
         {
-            Debug.Assert(IsIdxValid(i));
+            Dbg.Assert(IsIdxValid(i));
 
             Base()[i] = value;
         }
@@ -665,14 +665,14 @@ public class CUtlMemoryConservative<T>
 
     public T Element(int i)
     {
-        Debug.Assert(IsIdxValid(i));
+        Dbg.Assert(IsIdxValid(i));
 
         return Base()[i];
     }
 
     public void SetExternalBuffer(T[] memory, int numElements)
     {
-        Debug.Assert(false);
+        Dbg.Assert(false);
     }
 
     public void RememberAllocSize(ulong sz)
@@ -829,7 +829,7 @@ public class CUtlMemoryAligned<T> : CUtlMemory<T>
 
     public void Purge(int numElements)
     {
-        Debug.Assert(false);
+        Dbg.Assert(false);
     }
 
     private nint Align(nint addr)

@@ -16,9 +16,9 @@ public class FourRays
 #if !DEBUG
         for (int c = 1; c < 4; c++)
         {
-            Debug.Assert(direction.X(0) * direction.X(c) >= 0);
-            Debug.Assert(direction.Y(0) * direction.Y(c) >= 0);
-            Debug.Assert(direction.Z(0) * direction.Z(c) >= 0);
+            Dbg.Assert(direction.X(0) * direction.X(c) >= 0);
+            Dbg.Assert(direction.Y(0) * direction.Y(c) >= 0);
+            Dbg.Assert(direction.Z(0) * direction.Z(c) >= 0);
         }
 #endif // !DEBUG
     }
@@ -280,13 +280,13 @@ public struct CacheOptimizedKDNode
 
     public int TriangleIndexStart()
     {
-        Debug.Assert(NodeType() == KDNODE_STATE_LEAF);
+        Dbg.Assert(NodeType() == KDNODE_STATE_LEAF);
         return children >> 2;
     }
 
     public int LeftChild()
     {
-        Debug.Assert(NodeType() == KDNODE_STATE_LEAF);
+        Dbg.Assert(NodeType() == KDNODE_STATE_LEAF);
         return children >> 2;
     }
 
@@ -297,7 +297,7 @@ public struct CacheOptimizedKDNode
 
     public int NumberOfTrianglesInLeaf()
     {
-        Debug.Assert(NodeType() == KDNODE_STATE_LEAF);
+        Dbg.Assert(NodeType() == KDNODE_STATE_LEAF);
         return (int)splittingPlaneValue;
     }
 
@@ -588,7 +588,7 @@ public class RayTracingEnvironment
                     {
                         for (int i = 0; i < nodeQueue.Length; i++)
                         {
-                            Debug.Assert(stack_ptr > nodeQueue[i]);
+                            Dbg.Assert(stack_ptr > nodeQueue[i]);
                         }
 
                         //--stack_ptr;
@@ -743,7 +743,7 @@ public class RayTracingEnvironment
                 RayTracingResult tmpresults = new RayTracingResult();
                 msk = tmprays.CalculateDirectionSignMask();
 
-                Debug.Assert(msk != -1);
+                Dbg.Assert(msk != -1);
 
                 Trace4Rays(tmprays, ref min, ref max, msk, ref tmpresults, skip_id, callback);
 

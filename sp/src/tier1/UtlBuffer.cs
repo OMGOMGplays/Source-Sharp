@@ -533,7 +533,7 @@ public class CUtlBuffer
 
     public string String()
     {
-        Debug.Assert(IsText());
+        Dbg.Assert(IsText());
 
         return memory.Base().ToString();
     }

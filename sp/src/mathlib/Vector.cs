@@ -5,7 +5,7 @@ namespace SourceSharp.SP.Mathlib;
 
 public class Vector
 {
-    public static void CHECK_VALID(dynamic x) { Debug.Assert(x.IsValid()); }
+    public static void CHECK_VALID(dynamic x) { Dbg.Assert(x.IsValid()); }
 
     public const int X_INDEX = 0;
     public const int Y_INDEX = 1;
@@ -197,7 +197,7 @@ public class Vector
     {
         CHECK_VALID(rhs);
 
-        Debug.Assert(rhs.x != 0.0f && rhs.y != 0.0f && rhs.z != 0.0f);
+        Dbg.Assert(rhs.x != 0.0f && rhs.y != 0.0f && rhs.z != 0.0f);
 
         lhs.x /= rhs.x;
         lhs.y /= rhs.y;
@@ -210,7 +210,7 @@ public class Vector
 
     public static Vector operator /(Vector lhs, dynamic rhs)
     {
-        Debug.Assert(rhs != 0.0f);
+        Dbg.Assert(rhs != 0.0f);
         float oo = 1.0f / rhs;
 
         lhs.x /= oo;
@@ -324,7 +324,7 @@ public class Vector
 
     public void CopyToArray(float[] array)
     {
-        Debug.Assert(array != null);
+        Dbg.Assert(array != null);
         CHECK_VALID(this);
 
         array[0] = x;
@@ -435,7 +435,7 @@ public class Vector
     public static void VectorMultiply(Vector a, float b, out Vector result)
     {
         CHECK_VALID(a);
-        Debug.Assert(BaseTypes.IsFinite(b));
+        Dbg.Assert(BaseTypes.IsFinite(b));
 
         result = new Vector(a.x * b, a.y * b, a.z * b);
     }
@@ -445,7 +445,7 @@ public class Vector
         CHECK_VALID(a);
         CHECK_VALID(b);
 
-        Debug.Assert(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f);
+        Dbg.Assert(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f);
 
         result = new Vector(a.x / b.x, a.y / b.y, a.z / b.z);
     }
@@ -453,7 +453,7 @@ public class Vector
     public static void VectorDivide(Vector a, float b, out Vector result)
     {
         CHECK_VALID(a);
-        Debug.Assert(b != 0.0f);
+        Dbg.Assert(b != 0.0f);
 
         float oo = 1.0f / b;
 
@@ -505,8 +505,8 @@ public class Vector
         CHECK_VALID(a);
         CHECK_VALID(b);
 
-        Debug.Assert(a != result);
-        Debug.Assert(b != result);
+        Dbg.Assert(a != result);
+        Dbg.Assert(b != result);
 
         result.x = a.y * b.z - a.z * b.y;
         result.y = a.z * b.x - a.x * b.z;
@@ -691,7 +691,7 @@ public class Vector
     public static void VectorScale(RadianEuler src, float b, out RadianEuler dst)
     {
         CHECK_VALID(src);
-        Debug.Assert(BaseTypes.IsFinite(b));
+        Dbg.Assert(BaseTypes.IsFinite(b));
 
         dst = new RadianEuler(src.x * b, src.y * b, src.z * b);
     }
@@ -880,7 +880,7 @@ public class ShortVector
 
     public static ShortVector operator /(ShortVector lhs, ShortVector rhs)
     {
-        Debug.Assert(rhs.x != 0.0f && rhs.y != 0.0f && rhs.z != 0.0f);
+        Dbg.Assert(rhs.x != 0.0f && rhs.y != 0.0f && rhs.z != 0.0f);
 
         lhs.x /= rhs.x;
         lhs.y /= rhs.y;
@@ -892,7 +892,7 @@ public class ShortVector
 
     public static ShortVector operator /(ShortVector lhs, dynamic rhs)
     {
-        Debug.Assert(rhs != 0.0f);
+        Dbg.Assert(rhs != 0.0f);
         float oo = 1.0f / rhs;
 
         lhs.x *= (short)oo;
@@ -905,7 +905,7 @@ public class ShortVector
 
     public static void ShortVectorMultiply(ShortVector src, float fl, ref ShortVector res)
     {
-        Debug.Assert(BaseTypes.IsFinite(fl));
+        Dbg.Assert(BaseTypes.IsFinite(fl));
 
         res.x = (short)(src.x * fl);
         res.y = (short)(src.y * fl);
@@ -1050,7 +1050,7 @@ public class IntVector4D
 
     public static IntVector4D operator /(IntVector4D lhs, IntVector4D rhs)
     {
-        Debug.Assert(rhs.x != 0.0f && rhs.y != 0.0f && rhs.z != 0.0f && rhs.w != 0.0f);
+        Dbg.Assert(rhs.x != 0.0f && rhs.y != 0.0f && rhs.z != 0.0f && rhs.w != 0.0f);
 
         lhs.x /= rhs.x;
         lhs.y /= rhs.y;
@@ -1062,7 +1062,7 @@ public class IntVector4D
 
     public static IntVector4D operator /(IntVector4D lhs, dynamic rhs)
     {
-        Debug.Assert(rhs != 0.0f);
+        Dbg.Assert(rhs != 0.0f);
         float oo = 1.0f / rhs;
 
         lhs.x *= (int)oo;
@@ -1075,7 +1075,7 @@ public class IntVector4D
 
     public static void IntVector4DMultiply(IntVector4D src, float fl, ref IntVector4D res)
     {
-        Debug.Assert(DataTypes.IsFinite(fl));
+        Dbg.Assert(DataTypes.IsFinite(fl));
 
         res.x = src.x * (int)fl;
         res.y = src.y * (int)fl;
@@ -1600,7 +1600,7 @@ public class QAngle
 
     public static QAngle operator /(QAngle lhs, dynamic rhs)
     {
-        Debug.Assert(rhs != 0.0f);
+        Dbg.Assert(rhs != 0.0f);
         float oo = 1.0f / rhs;
 
         lhs.x *= oo;

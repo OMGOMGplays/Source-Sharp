@@ -297,7 +297,7 @@ public class C_BaseEntity : IClientEntity
     protected Color32 previousRenderColor;
 #endif // TF_CLIENT
 
-    public static ConVar cl_extrapolate = new ConVar("cl_extrapolate", "1", FCVAR_CHEAT, "Enable/disable extrapolation if interpolation history runs out.");
+    public static ConVar cl_extrapolate = new ConVar("cl_extrapolate", "1", IConVar.FCVAR_CHEAT, "Enable/disable extrapolation if interpolation history runs out.");
 
     public void cc_cl_interp_all_changed(IConVar conVar, string oldString, float oldValue)
     {
@@ -1115,15 +1115,15 @@ public class C_BaseEntity : IClientEntity
 
     public virtual Vector WorldAlignMins()
     {
-        Debug.Assert(!CollisionProp().IsBoundsDefinedInEntitySpace());
-        Debug.Assert(CollisionProp().GetCollisionAngles() == Mathlib.Mathlib.vec3_angle);
+        Dbg.Assert(!CollisionProp().IsBoundsDefinedInEntitySpace());
+        Dbg.Assert(CollisionProp().GetCollisionAngles() == Mathlib.Mathlib.vec3_angle);
         return CollisionProp().OBBMins();
     }
 
     public virtual Vector WorldAlignMaxs()
     {
-        Debug.Assert(!CollisionProp().IsBoundsDefinedInEntitySpace());
-        Debug.Assert(CollisionProp().GetCollisionAngles() == Mathlib.Mathlib.vec3_angle);
+        Dbg.Assert(!CollisionProp().IsBoundsDefinedInEntitySpace());
+        Dbg.Assert(CollisionProp().GetCollisionAngles() == Mathlib.Mathlib.vec3_angle);
         return CollisionProp().OBBMaxs();
     }
 
@@ -1139,8 +1139,8 @@ public class C_BaseEntity : IClientEntity
 
     public Vector WorldAlignSize()
     {
-        Debug.Assert(!CollisionProp().IsBoundsDefinedInEntitySpace());
-        Debug.Assert(CollisionProp().GetCollisionAngles() == Mathlib.Mathlib.vec3_angle);
+        Dbg.Assert(!CollisionProp().IsBoundsDefinedInEntitySpace());
+        Dbg.Assert(CollisionProp().GetCollisionAngles() == Mathlib.Mathlib.vec3_angle);
         return CollisionProp().OBBSize();
     }
 
@@ -1161,7 +1161,7 @@ public class C_BaseEntity : IClientEntity
 
     public Matrix3x4 EntityToWorldTransform()
     {
-        Debug.Assert(absQueriesValid);
+        Dbg.Assert(absQueriesValid);
         CalcAbsolutePosition();
         return coordinateFrame;
     }
@@ -1962,7 +1962,7 @@ public class C_BaseEntity : IClientEntity
 
     public virtual void Think()
     {
-        Debug.Assert(think != Think, "Infinite recursion is inifinitely bad.");
+        Dbg.Assert(think != Think, "Infinite recursion is inifinitely bad.");
 
         if (think != null)
         {
@@ -2507,7 +2507,7 @@ public class C_BaseEntity : IClientEntity
 
     public Vector GetAbsVelocity()
     {
-        Debug.Assert(absQueriesValid);
+        Dbg.Assert(absQueriesValid);
         CalcAbsoluteVelocity();
         return absVelocity;
     }
@@ -3384,7 +3384,7 @@ public class C_BaseEntity : IClientEntity
 
     public static bool FClassnameIs(C_BaseEntity entity, string classname)
     {
-        Debug.Assert(entity != null);
+        Dbg.Assert(entity != null);
 
         if (entity == null)
         {

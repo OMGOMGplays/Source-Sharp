@@ -21,20 +21,20 @@ public class Vector2D
     {
         this.x = x;
         this.y = y;
-        Debug.Assert(IsValid());
+        Dbg.Assert(IsValid());
     }
 
     public Vector2D(float[] array)
     {
-        Debug.Assert(array != null);
+        Dbg.Assert(array != null);
         x = array[0];
         y = array[1];
-        Debug.Assert(IsValid());
+        Dbg.Assert(IsValid());
     }
 
     public Vector2D(Vector2D other)
     {
-        Debug.Assert(other.IsValid());
+        Dbg.Assert(other.IsValid());
         x = other.x;
         y = other.y;
     }
@@ -43,7 +43,7 @@ public class Vector2D
     {
         this.x = x;
         this.y = y;
-        Debug.Assert(IsValid());
+        Dbg.Assert(IsValid());
     }
 
     public bool IsValid()
@@ -103,7 +103,7 @@ public class Vector2D
 
     public static bool operator ==(Vector2D lhs, Vector2D rhs)
     {
-        Debug.Assert(lhs.IsValid() && rhs.IsValid());
+        Dbg.Assert(lhs.IsValid() && rhs.IsValid());
 
         return lhs.x == rhs.x && lhs.y == rhs.y;
     }
@@ -120,7 +120,7 @@ public class Vector2D
 
     public static Vector2D operator +(Vector2D lhs, Vector2D rhs)
     {
-        Debug.Assert(lhs.IsValid() && rhs.IsValid());
+        Dbg.Assert(lhs.IsValid() && rhs.IsValid());
 
         lhs.x += rhs.x;
         lhs.y += rhs.y;
@@ -130,7 +130,7 @@ public class Vector2D
 
     public static Vector2D operator -(Vector2D lhs, Vector2D rhs)
     {
-        Debug.Assert(lhs.IsValid() && rhs.IsValid());
+        Dbg.Assert(lhs.IsValid() && rhs.IsValid());
 
         lhs.x -= rhs.x;
         lhs.y -= rhs.y;
@@ -143,7 +143,7 @@ public class Vector2D
         lhs.x *= rhs.x;
         lhs.y *= rhs.y;
 
-        Debug.Assert(lhs.IsValid());
+        Dbg.Assert(lhs.IsValid());
         return lhs;
     }
 
@@ -152,35 +152,35 @@ public class Vector2D
         lhs.x *= rhs;
         lhs.y *= rhs;
 
-        Debug.Assert(lhs.IsValid());
+        Dbg.Assert(lhs.IsValid());
         return lhs;
     }
 
     public static Vector2D operator /(Vector2D lhs, Vector2D rhs)
     {
-        Debug.Assert(rhs.x != 0.0f && rhs.y != 0.0f);
+        Dbg.Assert(rhs.x != 0.0f && rhs.y != 0.0f);
         lhs.x /= rhs.x;
         lhs.y /= rhs.y;
 
-        Debug.Assert(lhs.IsValid());
+        Dbg.Assert(lhs.IsValid());
         return lhs;
     }
 
     public static Vector2D operator /(Vector2D lhs, float rhs)
     {
-        Debug.Assert(rhs != 0.0f);
+        Dbg.Assert(rhs != 0.0f);
         float oo = 1.0f / rhs;
 
         lhs.x /= oo;
         lhs.y /= oo;
 
-        Debug.Assert(lhs.IsValid());
+        Dbg.Assert(lhs.IsValid());
         return lhs;
     }
 
     public void Negate()
     {
-        Debug.Assert(IsValid());
+        Dbg.Assert(IsValid());
         x = -x;
         y = -y;
     }
@@ -192,7 +192,7 @@ public class Vector2D
 
     public float LengthSqr()
     {
-        Debug.Assert(IsValid());
+        Dbg.Assert(IsValid());
         return x * x + y * y;
     }
 
@@ -233,8 +233,8 @@ public class Vector2D
 
     public void CopyToArray(float[] array)
     {
-        Debug.Assert(IsValid());
-        Debug.Assert(array != null);
+        Dbg.Assert(IsValid());
+        Dbg.Assert(array != null);
 
         array[0] = x;
         array[1] = y;
@@ -272,51 +272,51 @@ public class Vector2D
 
     public static void Vector2DCopy(Vector2D src, out Vector2D dst)
     {
-        Debug.Assert(src.IsValid());
+        Dbg.Assert(src.IsValid());
 
         dst = new Vector2D(src.x, src.y);
     }
 
     public static void Vector2DAdd(Vector2D a, Vector2D b, out Vector2D result)
     {
-        Debug.Assert(a.IsValid() && b.IsValid());
+        Dbg.Assert(a.IsValid() && b.IsValid());
 
         result = new Vector2D(a.x + b.x, a.y + b.y);
     }
 
     public static void Vector2DSubtract(Vector2D a, Vector2D b, out Vector2D result)
     {
-        Debug.Assert(a.IsValid() && b.IsValid());
+        Dbg.Assert(a.IsValid() && b.IsValid());
 
         result = new Vector2D(a.x - b.x, a.y - b.y);
     }
 
     public static void Vector2DMultiply(Vector2D a, Vector2D b, out Vector2D result)
     {
-        Debug.Assert(a.IsValid() && b.IsValid());
+        Dbg.Assert(a.IsValid() && b.IsValid());
 
         result = new Vector2D(a.x * b.x, a.y * b.y);
     }
 
     public static void Vector2DMultiply(Vector2D a, float b, out Vector2D result)
     {
-        Debug.Assert(a.IsValid() && BaseTypes.IsFinite(b));
+        Dbg.Assert(a.IsValid() && BaseTypes.IsFinite(b));
 
         result = new Vector2D(a.x * b, a.y * b);
     }
 
     public static void Vector2DDivide(Vector2D a, Vector2D b, out Vector2D result)
     {
-        Debug.Assert(a.IsValid());
-        Debug.Assert(b.x != 0.0f && b.y != 0.0f);
+        Dbg.Assert(a.IsValid());
+        Dbg.Assert(b.x != 0.0f && b.y != 0.0f);
 
         result = new Vector2D(a.x / b.x, a.y / b.y);
     }
 
     public static void Vector2DDivide(Vector2D a, float b, out Vector2D result)
     {
-        Debug.Assert(a.IsValid());
-        Debug.Assert(b != 0.0f);
+        Dbg.Assert(a.IsValid());
+        Dbg.Assert(b != 0.0f);
 
         float oo = 1.0f / b;
         result = new Vector2D(a.x / oo, a.y / oo);
@@ -324,7 +324,7 @@ public class Vector2D
 
     public static void Vector2DMA(Vector2D start, float s, Vector2D dir, out Vector2D result)
     {
-        Debug.Assert(start.IsValid() && BaseTypes.IsFinite(s) && dir.IsValid());
+        Dbg.Assert(start.IsValid() && BaseTypes.IsFinite(s) && dir.IsValid());
 
         result = new Vector2D(start.x + s * dir.x, start.y + s * dir.y);
     }
@@ -341,7 +341,7 @@ public class Vector2D
 
     public static float Vector2DNormalize(Vector2D vector)
     {
-        Debug.Assert(vector.IsValid());
+        Dbg.Assert(vector.IsValid());
         float l = vector.Length();
 
         if (l != 0.0f)
@@ -358,13 +358,13 @@ public class Vector2D
 
     public static float Vector2DLength(Vector2D vector)
     {
-        Debug.Assert(vector.IsValid());
+        Dbg.Assert(vector.IsValid());
         return (float)MathF.Sqrt(vector.x*vector.x+ vector.y*vector.y);
     }
 
     public static float DotProduct2D(Vector2D a, Vector2D b)
     {
-        Debug.Assert(a.IsValid() && b.IsValid());
+        Dbg.Assert(a.IsValid() && b.IsValid());
         return (a.x * b.x + a.y * b.y);
     }
 

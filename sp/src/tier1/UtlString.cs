@@ -34,7 +34,7 @@ public class CUtlBinaryBlock
 
     public void Get(object value, int len)
     {
-        Debug.Assert(len > 0);
+        Dbg.Assert(len > 0);
 
         if (actualLength < len)
         {
@@ -49,7 +49,7 @@ public class CUtlBinaryBlock
 
     public void Set(object value, int len)
     {
-        Debug.Assert(!memory.IsReadOnly());
+        Dbg.Assert(!memory.IsReadOnly());
 
         if (value == null)
         {
@@ -97,7 +97,7 @@ public class CUtlBinaryBlock
 
     public void SetLength(int length)
     {
-        Debug.Assert(!memory.IsReadOnly());
+        Dbg.Assert(!memory.IsReadOnly());
 
         actualLength = length;
 
@@ -188,7 +188,7 @@ public class CUtlString
 
     public string Get()
     {
-        Debug.Assert(!storage.IsReadOnly());
+        Dbg.Assert(!storage.IsReadOnly());
 
         if (storage.Length() == 0)
         {
@@ -201,7 +201,7 @@ public class CUtlString
 
     public void Set(string value)
     {
-        Debug.Assert(!storage.IsReadOnly());
+        Dbg.Assert(!storage.IsReadOnly());
         int len = value != null ? value.Length + 1 : 0;
         storage.Set(value, len);
     }
@@ -209,6 +209,11 @@ public class CUtlString
     public static explicit operator string(CUtlString lhs)
     {
         return lhs.Get();
+    }
+
+    public static explicit operator CUtlString(string lhs)
+    {
+        return new CUtlString(lhs);
     }
 
     public string String()
@@ -228,7 +233,7 @@ public class CUtlString
 
     public void SetLength(int len)
     {
-        Debug.Assert(!storage.IsReadOnly());
+        Dbg.Assert(!storage.IsReadOnly());
 
         storage.SetLength(len > 0 ? len + 1 : 0);
     }
@@ -278,9 +283,9 @@ public class CUtlString
         return !(lhs == rhs);
     }
 
-    public static CUtlString operator +=(CUtlString lhs, CUtlString rhs)
+    public static CUtlString operator +(CUtlString lhs, CUtlString rhs)
     {
-        Debug.Assert(!lhs.storage.IsReadOnly());
+        Dbg.Assert(!lhs.storage.IsReadOnly());
 
         int lhsLength = lhs.Length();
         int rhsLength = rhs.Length();
@@ -297,22 +302,22 @@ public class CUtlString
         return lhs;
     }
 
-    public static CUtlString operator +=(CUtlString lhs, string rhs)
+    public static CUtlString operator +(CUtlString lhs, string rhs)
     {
 
     }
 
-    public static CUtlString operator +=(CUtlString lhs, char rhs)
+    public static CUtlString operator +(CUtlString lhs, char rhs)
     {
 
     }
 
-    public static CUtlString operator+=(CUtlString lhs, int rhs)
+    public static CUtlString operator+(CUtlString lhs, int rhs)
     {
 
     }
 
-    public static CUtlString operator+=(CUtlString lhs, double rhs)
+    public static CUtlString operator+(CUtlString lhs, double rhs)
     {
 
     }
@@ -334,7 +339,7 @@ public class CUtlString
 
     public void SetDirect(string value, int chars)
     {
-        Debug.Assert(!storage.IsReadOnly());
+        Dbg.Assert(!storage.IsReadOnly());
         storage.Set(value, chars + 1);
 
         (((string)storage.Get()) + chars) = null;

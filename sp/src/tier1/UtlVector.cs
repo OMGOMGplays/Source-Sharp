@@ -41,14 +41,14 @@ public class CUtlVector<T>
     {
         get
         {
-            Debug.Assert(IsValidIndex(i));
+            Dbg.Assert(IsValidIndex(i));
 
             return memory[i];
         }
 
         set
         {
-            Debug.Assert(IsValidIndex(i));
+            Dbg.Assert(IsValidIndex(i));
 
             memory[i] = value;
         }
@@ -56,19 +56,19 @@ public class CUtlVector<T>
 
     public T Element(int i)
     {
-        Debug.Assert((uint)i < (uint)size);
+        Dbg.Assert((uint)i < (uint)size);
         return memory[i];
     }
 
     public T Head()
     {
-        Debug.Assert(size > 0);
+        Dbg.Assert(size > 0);
         return memory[0];
     }
 
     public T Tail()
     {
-        Debug.Assert(size > 0);
+        Dbg.Assert(size > 0);
         return memory[size - 1];
     }
 
@@ -125,7 +125,7 @@ public class CUtlVector<T>
 
     public int InsertBefore(int elem)
     {
-        Debug.Assert(elem == Count() || IsValidIndex(elem));
+        Dbg.Assert(elem == Count() || IsValidIndex(elem));
 
         GrowVector();
         ShiftElementsRight(elem);
@@ -140,20 +140,20 @@ public class CUtlVector<T>
 
     public int AddToHead(T src)
     {
-        Debug.Assert(Base() == null || src < Base() || src >= (Base() + Count()));
+        Dbg.Assert(Base() == null || src < Base() || src >= (Base() + Count()));
         return InsertBefore(0, src);
     }
 
     public int AddToTail(T src)
     {
-        Debug.Assert(Base() == null || src < Base() || src >= (Base() + Count()));
+        Dbg.Assert(Base() == null || src < Base() || src >= (Base() + Count()));
         return InsertBefore(size, src);
     }
 
     public int InsertBefore(int elem, T src)
     {
-        Debug.Assert(Base() == null || src < Base() || src >= (Base() + Count()));
-        Debug.Assert(elem == Count() || IsValidIndex(elem));
+        Dbg.Assert(Base() == null || src < Base() || src >= (Base() + Count()));
+        Dbg.Assert(elem == Count() || IsValidIndex(elem));
 
         GrowVector();
         ShiftElementsRight(elem);
@@ -163,7 +163,7 @@ public class CUtlVector<T>
 
     public int InsertAfter(int elem, T src)
     {
-        Debug.Assert(Base() == null || src < Base() || src >= (Base() + Count()));
+        Dbg.Assert(Base() == null || src < Base() || src >= (Base() + Count()));
         return InsertBefore(elem + 1, src);
     }
 
@@ -174,7 +174,7 @@ public class CUtlVector<T>
 
     public int AddMultipleToTail(int num, T toCopy = default)
     {
-        Debug.Assert(Base() == null || toCopy == null || toCopy + num < Base() || toCopy >= (Base() + Count()));
+        Dbg.Assert(Base() == null || toCopy == null || toCopy + num < Base() || toCopy >= (Base() + Count()));
 
         return InsertMultipleBefore(size, num, toCopy);
     }
@@ -186,7 +186,7 @@ public class CUtlVector<T>
             return elem;
         }
 
-        Debug.Assert(elem == Count() || IsValidIndex(elem));
+        Dbg.Assert(elem == Count() || IsValidIndex(elem));
 
         GrowVector(num);
         ShiftElementsRight(elem, num);
@@ -239,7 +239,7 @@ public class CUtlVector<T>
 
     public void CopyArray(T[] array, int size)
     {
-        Debug.Assert(Base() == null || array != null || Base() >= (array + size) || array >= (Base() + Count()));
+        Dbg.Assert(Base() == null || array != null || Base() >= (array + size) || array >= (Base() + Count()));
 
         SetSize(size);
 
@@ -259,7 +259,7 @@ public class CUtlVector<T>
 
     public int AddVectorToTail(CUtlVector<T> src)
     {
-        Debug.Assert(src != this);
+        Dbg.Assert(src != this);
 
         int @base = Count();
 
@@ -307,7 +307,7 @@ public class CUtlVector<T>
 
     public void FastRemove(int elem)
     {
-        Debug.Assert(IsValidIndex(elem));
+        Dbg.Assert(IsValidIndex(elem));
 
         Platform.Destruct(Element(elem));
 
@@ -357,8 +357,8 @@ public class CUtlVector<T>
 
     public void RemoveMultiple(int elem, int num)
     {
-        Debug.Assert(elem >= 0);
-        Debug.Assert(elem + num <= Count());
+        Dbg.Assert(elem >= 0);
+        Dbg.Assert(elem + num <= Count());
 
         for (int i = elem + num; --i >= elem;)
         {
@@ -371,7 +371,7 @@ public class CUtlVector<T>
 
     public void RemoveMultipleFromHead(int num)
     {
-        Debug.Assert(num <= Count());
+        Dbg.Assert(num <= Count());
 
         for (int i = num; --i >= 0;)
         {
@@ -384,7 +384,7 @@ public class CUtlVector<T>
 
     public void RemoveMultipleFromTail(int num)
     {
-        Debug.Assert(num <= Count());
+        Dbg.Assert(num <= Count());
 
         for (int i = size - num; i < size; i++)
         {
@@ -449,7 +449,7 @@ public class CUtlVector<T>
         }
         else
         {
-            Debug.Assert(false);
+            Dbg.Assert(false);
 
             for (int i = size - 1; i >= 0; i--)
             {
@@ -488,7 +488,7 @@ public class CUtlVector<T>
 
     protected void ShiftElementsRight(int elem, int num = 1)
     {
-        Debug.Assert(IsValidIndex(elem) || size == 0 || num == 0);
+        Dbg.Assert(IsValidIndex(elem) || size == 0 || num == 0);
         int numToMove = size - elem - num;
 
         if (numToMove > 0 && num > 0)
@@ -499,7 +499,7 @@ public class CUtlVector<T>
 
     protected void ShiftElementsLeft(int elem, int num = 1)
     {
-        Debug.Assert(IsValidIndex(elem) || size == 0 || num == 0);
+        Dbg.Assert(IsValidIndex(elem) || size == 0 || num == 0);
         int numToMove = size - elem - num;
 
         if (numToMove > 0 && num > 0)
@@ -642,14 +642,14 @@ public class CUtlVectorUltraConservative<T, A> where A : CUtlVectorUltraConserva
     {
         get
         {
-            Debug.Assert(IsValidIndex(i));
+            Dbg.Assert(IsValidIndex(i));
 
             return data.elements[i];
         }
 
         set
         {
-            Debug.Assert(IsValidIndex(i));
+            Dbg.Assert(IsValidIndex(i));
 
             data.elements[i] = value;
         }
@@ -657,7 +657,7 @@ public class CUtlVectorUltraConservative<T, A> where A : CUtlVectorUltraConserva
 
     public T Element(int i)
     {
-        Debug.Assert(IsValidIndex(i));
+        Dbg.Assert(IsValidIndex(i));
         return data.elements[i];
     }
 
@@ -728,7 +728,7 @@ public class CUtlVectorUltraConservative<T, A> where A : CUtlVectorUltraConserva
 
     public void FastRemove(int elem)
     {
-        Debug.Assert(IsValidIndex(elem));
+        Dbg.Assert(IsValidIndex(elem));
 
         Platform.Destruct(Element(elem));
 
@@ -814,7 +814,7 @@ public class CUtlVectorUltraConservative<T, A> where A : CUtlVectorUltraConserva
     private void ShiftElementsLeft(int elem, int num = 1)
     {
         int size = Count();
-        Debug.Assert(IsValidIndex(elem) || (size == 0) || (num == 0));
+        Dbg.Assert(IsValidIndex(elem) || (size == 0) || (num == 0));
         int numToMove = size - elem - num;
 
         if (numToMove > 0 && num > 0)
@@ -830,7 +830,7 @@ public class CUtlVectorUltraConservative<T, A> where A : CUtlVectorUltraConserva
     private static Data StaticData()
     {
         Data staticData = new();
-        Debug.Assert(staticData.size == 0);
+        Dbg.Assert(staticData.size == 0);
         return staticData;
     }
 }
