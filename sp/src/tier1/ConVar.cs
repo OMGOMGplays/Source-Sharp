@@ -1,9 +1,7 @@
-﻿using SourceSharp.SP.Game.Client;
-using SourceSharp.SP.Tier1;
-using System;
+﻿using System;
 using System.Diagnostics;
 
-namespace SourceSharp.SP.Game.Client;
+namespace SourceSharp.SP.Tier1;
 
 public interface IConCommandBaseAccessor
 {
