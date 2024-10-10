@@ -44,7 +44,7 @@ public class ConCommandBase
 
     public static void ConVar_Register(int cVarFlag, IConCommandBaseAccessor accessor)
     {
-        if (Tier1.Tier1.cVar == null || CDefaultAccessor.registered)
+        if (Tier1.cVar == null || CDefaultAccessor.registered)
         {
             return;
         }
@@ -52,7 +52,7 @@ public class ConCommandBase
         Dbg.Assert(CDefaultAccessor.dllIdentifier < 0);
         CDefaultAccessor.registered = true;
         CDefaultAccessor.cVarFlag = cVarFlag;
-        CDefaultAccessor.dllIdentifier = Tier1.Tier1.cVar.AllocateDLLIdentifier();
+        CDefaultAccessor.dllIdentifier = Tier1.cVar.AllocateDLLIdentifier();
 
         ConCommandBase cur, next;
 
@@ -67,7 +67,7 @@ public class ConCommandBase
             cur = next;
         }
 
-        Tier1.Tier1.cVar.ProcessQueuedMaterialThreadConVarSets();
+        Tier1.cVar.ProcessQueuedMaterialThreadConVarSets();
         conCommandBases = null;
     }
 
@@ -174,9 +174,9 @@ public class ConCommandBase
 
     protected void Shutdown()
     {
-        if (Tier1.Tier1.cVar != null)
+        if (Tier1.cVar != null)
         {
-            Tier1.Tier1.cVar.UnregisterCommand(this);
+            Tier1.cVar.UnregisterConCommand(this);
         }
     }
 
@@ -756,9 +756,9 @@ public class ConVar : ConCommandBase, IConVar
     {
         if (IsFlagSet(IConVar.FCVAR_MATERIAL_THREAD_MASK))
         {
-            if (Tier1.Tier1.cVar != null && !Tier1.Tier1.cVar.IsMaterialThreadSetAllowed())
+            if (Tier1.cVar != null && !Tier1.cVar.IsMaterialThreadSetAllowed())
             {
-                Tier1.Tier1.cVar.QueueMaterialThreadSetValue(this, value);
+                Tier1.cVar.QueueMaterialThreadSetValue(this, value);
                 return;
             }
         }
@@ -806,9 +806,9 @@ public class ConVar : ConCommandBase, IConVar
 
         if (IsFlagSet(IConVar.FCVAR_MATERIAL_THREAD_MASK))
         {
-            if (Tier1.Tier1.cVar != null && Tier1.Tier1.cVar.IsMaterialThreadSetAllowed())
+            if (Tier1.cVar != null && Tier1.cVar.IsMaterialThreadSetAllowed())
             {
-                Tier1.Tier1.cVar.QueueMaterialThreadSetValue(this, value);
+                Tier1.cVar.QueueMaterialThreadSetValue(this, value);
                 return;
             }
         }
@@ -842,9 +842,9 @@ public class ConVar : ConCommandBase, IConVar
 
         if (IsFlagSet(IConVar.FCVAR_MATERIAL_THREAD_MASK))
         {
-            if (Tier1.Tier1.cVar != null && !Tier1.Tier1.IsMaterialThreadSetAllowed())
+            if (Tier1.cVar != null && !Tier1.Tier1.IsMaterialThreadSetAllowed())
             {
-                Tier1.Tier1.cVar.QueueMaterialThreadSetValue(this, value);
+                Tier1.cVar.QueueMaterialThreadSetValue(this, value);
                 return;
             }
         }
@@ -924,7 +924,7 @@ public class ConVar : ConCommandBase, IConVar
             changeCallback(this, _oldValue, oldValue);
         }
 
-        Tier1.Tier1.cVar.CallGlobalChangeCallbacks(this, _oldValue, oldValue);
+        Tier1.cVar.CallGlobalChangeCallback(this, _oldValue, oldValue);
 
         _oldValue = null;
     }
@@ -979,13 +979,13 @@ public class ConVar : ConCommandBase, IConVar
 
     public static void ConVar_Unregister()
     {
-        if (Tier1.Tier1.cVar == null || !CDefaultAccessor.registered)
+        if (Tier1.cVar == null || !CDefaultAccessor.registered)
         {
             return;
         }
 
         Dbg.Assert(CDefaultAccessor.dllIdentifier > 0);
-        Tier1.Tier1.cVar.UnregisterConCommands(CDefaultAccessor.dllIdentifier);
+        Tier1.cVar.UnregisterConCommands(CDefaultAccessor.dllIdentifier);
         CDefaultAccessor.dllIdentifier = -1;
         CDefaultAccessor.registered = false;
     }
@@ -1172,7 +1172,7 @@ public class ConVarRef
 
     public void Init(string name, bool ignoreMissing)
     {
-        conVar = Tier1.Tier1.cVar != null ? Tier1.Tier1.cVar.FindVar(name) : emptyConVar;
+        conVar = Tier1.cVar != null ? Tier1.cVar.FindVar(name) : emptyConVar;
 
         if (conVar == null)
         {
@@ -1185,7 +1185,7 @@ public class ConVarRef
         {
             bool first = true;
 
-            if (Tier1.Tier1.cVar != null || first)
+            if (Tier1.cVar != null || first)
             {
                 if (!ignoreMissing)
                 {
@@ -1356,7 +1356,7 @@ public class CDefaultAccessor : IConCommandBaseAccessor
 
     public bool RegisterConCommandBase(ConCommandBase var)
     {
-        Tier1.Tier1.cVar.RegisterConCommand(var);
+        Tier1.cVar.RegisterConCommand(var);
         return true;
     }
 }

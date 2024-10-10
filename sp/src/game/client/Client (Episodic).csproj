@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>client</RootNamespace>
+    <OutputType>Library</OutputType>
+    <RootNamespace>SourceSharp.SP.Game.Client</RootNamespace>
     <AssemblyName>client</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Configurations>Debug;Release;X360-Release;X360-Debug</Configurations>
