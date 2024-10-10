@@ -1,16 +1,23 @@
-﻿global using FileHandle = object;
-global using FileCacheHandle = object;
-global using FileNameHandle = object;
+﻿using FileHandle = object;
+using FileCacheHandle = object;
+using FileFindHandle = int;
+using FileNameHandle = object;
+
+using FSAsyncControl = object;
+using FSAsyncFile = object;
 
 using System;
 
 using SourceSharp.SP.Tier1;
 
-namespace SourceSharp.SP.Utils.CaptionCompiler;
+namespace SourceSharp.SP.Game.Client;
 
+/// <summary>
+/// How strict will the pure server be for a particular set of files
+/// </summary>
 public enum PureServerFileClass
 {
-    PureServerFileClass_Unknown = -1,
+    PureServerFileClass_Unknown = -1, // Dummy debugging value
     PureServerFileClass_Any = 0,
     PureServerFileClass_AnyTrusted,
     PureServerFileClass_CheckHash
@@ -18,14 +25,21 @@ public enum PureServerFileClass
 
 public interface IPureServerWhitelist
 {
+    // Reference counting
     public void AddRef();
     public void Release();
 
+    // What should we do with a particular file?
     public PureServerFileClass GetFileClass(string filename);
 
+    // Access list of trusted keys which we will allow to set trusted content
     public int GetTrustedKeyCount();
     public byte GetTrustedKey(int keyIndex, int keySize);
 }
+
+// -----------------------------------------------------------------------------
+// Enums used by the interface
+// -----------------------------------------------------------------------------
 
 public enum FileSystemSeek
 {
@@ -160,6 +174,7 @@ public class FileBlockingItem
 
 public interface IBlockingFileItemList
 {
+    // You can't call any of the below calls without locking first
     public void LockMutex();
     public void UnlockMutex();
 
@@ -422,12 +437,12 @@ public interface IFileSystem : IAppSystem, IBaseFileSystem
     /// <summary>
     /// Add paths in priority order (mod dir, game dir, ...)<br/>
     /// <br/>
-    /// If one or more .pak files are in the specified directory, then they are<br/>
+    /// If one or more .pak files are in the specified directory, then they are
     /// added after the file system path<br/>
     /// <br/>
-    /// If the path is the relative path to a .bsp file, then any previous .bsp file<br/>
-    /// override is cleared and the current .bsp is searched for an embedded PAK file<br/>
-    /// and this file becomes the highest priority search path (i.e., it's looked at first<br/>
+    /// If the path is the relative path to a .bsp file, then any previous .bsp file
+    /// override is cleared and the current .bsp is searched for an embedded PAK file
+    /// and this file becomes the highest priority search path (i.e., it's looked at first
     /// even before the mod's file system path).
     /// </summary>
     public void AddSearchPath(string path, string pathID, SearchPathAdd addType = SearchPathAdd.PATH_ADD_TO_TAIL);
@@ -444,9 +459,9 @@ public interface IFileSystem : IAppSystem, IBaseFileSystem
     public void RemoveSearchPaths(string pathID);
 
     /// <summary>
-    /// This is for optimization. If you mark a path ID as "by request only", then files inside it<br/>
-    /// will only be accessed if the path ID is specifically requested. Otherwise, it will be ignored.<br/>
-    /// If there are currently no search paths with the specified path ID, then it will still<br/>
+    /// This is for optimization. If you mark a path ID as "by request only", then files inside it
+    /// will only be accessed if the path ID is specifically requested. Otherwise, it will be ignored.
+    /// If there are currently no search paths with the specified path ID, then it will still
     /// remember it in case you add search paths with this path ID.
     /// </summary>
     public void MarkPathIDByRequestOnly(string pathID, bool requestOnly);

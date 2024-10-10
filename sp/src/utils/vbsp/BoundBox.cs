@@ -1,7 +1,8 @@
-﻿using SourceSharp.SP.Mathlib;
-using System;
+﻿using System;
 
-namespace SourceSharp.SP.VBSP;
+using SourceSharp.SP.Mathlib;
+
+namespace SourceSharp.SP.Utils.VBSP;
 
 public enum Axis
 {

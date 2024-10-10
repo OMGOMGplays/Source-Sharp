@@ -8,6 +8,6 @@
     <Configurations>Debug;Release;X360-Release;X360-Debug</Configurations>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\tier1\Tier 1.csproj" />
+    <ProjectReference Include="..\..\game\client\Client (HL2).csproj" />
   </ItemGroup>
 </Project>
