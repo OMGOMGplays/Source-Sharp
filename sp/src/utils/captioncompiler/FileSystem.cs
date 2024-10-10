@@ -1,5 +1,10 @@
-﻿using SourceSharp.SP.Tier1;
+﻿global using FileHandle = object;
+global using FileCacheHandle = object;
+global using FileNameHandle = object;
+
 using System;
+
+using SourceSharp.SP.Tier1;
 
 namespace SourceSharp.SP.Utils.CaptionCompiler;
 
@@ -719,10 +724,22 @@ public interface IFileSystem : IAppSystem, IBaseFileSystem
     // Optimal I/O operations
     // ---------------------------------------------------------
 
-    public bool GetOptimalIOConstraints(FileHandle file, uint offsetAlign, uint sizeAlign, uint bufferAlign);
-    public uint GetOptimalReadSize(FileHandle file, uint logicalSize);
+    public bool GetOptimalIOConstraints(FileHandle file, ref uint offsetAlign, uint sizeAlign, uint bufferAlign);
+    public uint GetOptimalReadSize(FileHandle file, uint logicalSize)
+    {
+        uint align = 0;
+
+        if (GetOptimalIOConstraints(file, ref align, 0, 0))
+        {
+            return AlignValue(logicalSize, align);
+        }
+        else
+        {
+            return logicalSize;
+        }
+    }
     public object AllocOptimalReadBuffer(FileHandle file, uint size = 0, uint offset = 0);
-    public void FreeOptimalReadBuffer();
+    public void FreeOptimalReadBuffer(object a);
 
     // ---------------------------------------------------------
     // 
@@ -761,4 +778,104 @@ public interface IFileSystem : IAppSystem, IBaseFileSystem
     /// unverified because this server may have a different set of files it wants to guarantee.
     /// </summary>
     public void MarkAllCRCsUnverified();
+
+    /// <summary>
+    /// As the server loads whitelists when it transitions maps, it calls this to calculate CRCs for any files marked
+    /// with check_crc. Then it calls <see cref="CheckCachedFileCRC"/> later when it gets client requests to verify CRCs.
+    /// </summary>
+    public void CacheFileCRCs(string pathname, CacheCRCType type, IFileList filter);
+    public FileCRCStatus CheckCachedFileHash(string pathID, string relativeFilename, int fileFraction, FileHash fileHash);
+
+    /// <summary>
+    /// Fills in the list of files that have been loaded off disk and have not been verified.<br/>
+    /// Returns the number of files filled in (between 0 and maxFiles). <br/>
+    /// <br/>
+    /// This also removes any files it's returning from the unverified CRC list, so they won't be
+    /// returned from here again.<br/>
+    /// The client sends batches of these to the server to verify.
+    /// </summary>
+    public int GetUnverifiedFileHashes(CUnverifiedFileHash[] files, int maxFiles);
+
+    /// <summary>
+    /// Control debug message output.<br/>
+    /// Pass a combination of WHITELIST_SPEW_ flags.
+    /// </summary>
+    public int GetWhitelistSpewFlags();
+    public void SetWhitelistSpewFlags(int flags);
+
+    /// <summary>
+    /// Installs a callback used to display a dirty disk dialog
+    /// </summary>
+    public void InstallDirtyDiskReportFunc(DirtyDiskReportFunc func);
+
+    // ---------------------------------------------------------
+    // Low-level file caching. Cached files are loaded into memory and used
+    // to satisfy read requests (sync and async) until the cache is destroyed.
+    // NOTE: this could defeat file whitelisting, if a file were loaded in
+    // a non-whitelisted environment and then reused. Clients should not cache
+    // files across moves between pure/non-pure environments.
+    // ---------------------------------------------------------
+
+    public FileCacheHandle CreateFileCache();
+    public void AddFilesToFileCache(FileCacheHandle cacheId, string[] fileNames, int numFileNames, string pathID);
+    public bool IsFileCacheFileLoaded(FileCacheHandle cacheId, string filename);
+    public bool IsFileCacheLoaded(FileCacheHandle cacheId);
+    public void DestroyFileCache(FileCacheHandle cacheId);
+
+    // XXX For now, we assume that all path IDs are "GAME", never cache files
+    // outside of the game search path, and preferentially return those files
+    // whenever anyone searches for a match even if an on-disk file in another
+    // folder would have been found first in a traditional search. extending
+    // the memory cache to cover non-game files isn't necessary right now, but
+    // should just be a matter of defining a more complex key type. (henryg)
+    // (thank you henryg for your insightful knowledge 🙏)
+
+    /// <summary>
+    /// Register a <see cref="CMemoryFileBacking"/>; must balance with <see cref="UnregisterMemoryFile"/>. <br/>
+    /// Returns <see langword="false"/> and outputs an ref-bumped pointer to the existing entry
+    /// if the same file has already been registered by someone else; this must
+    /// be Unregistered to maintain the balance.
+    /// </summary>
+    public bool RegisterMemoryFile(CMemoryFileBacking file, ref CMemoryFileBacking existingFileWithRef);
+
+    /// <summary>
+    /// Unregister a <see cref="CMemoryFileBacking"/>; must balance with <see cref="RegisterMemoryFile(CMemoryFileBacking, ref CMemoryFileBacking)"/>.
+    /// </summary>
+    public void UnregisterMemoryFile(CMemoryFileBacking file);
+
+    public void CacheAllVPKFileHashes(bool cacheAllVPKHashes, bool recalculateAndCheckHashes);
+    public bool CheckVPKFileHash(int packFileID, int packFileNumber, int fileFraction, MD5Value md5Value);
+
+    /// <summary>
+    /// Called when we unload a file, to remove that file's info for pure server purposes.
+    /// </summary>
+    public void NotifyFileUnloaded(string filename, string pathID);
+}
+
+public class CMemoryFileBacking : CRefCounted<CRefCountServiceMT>
+{
+    public IFileSystem fs;
+    public int registered;
+    public string fileName;
+    public byte[] data;
+    public int length;
+
+    public CMemoryFileBacking(IFileSystem fs)
+    {
+        this.fs = fs;
+        registered = 0;
+        fileName = null;
+        data = null;
+        length = 0;
+    }
+
+    ~CMemoryFileBacking()
+    {
+        fileName = null;
+        
+        if (data != null)
+        {
+            fs.FreeOptimalReadBuffer(data);
+        }
+    }
 }
