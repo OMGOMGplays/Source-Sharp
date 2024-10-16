@@ -71,7 +71,7 @@ public class FPExceptionEnabler
     }
 #endif // DEBUG
 
-    private static T clamp<T>(T val, T minVal, T maxVal)
+    private static dynamic clamp(dynamic val, dynamic minVal, dynamic maxVal)
     {
         if (maxVal < minVal)
         {

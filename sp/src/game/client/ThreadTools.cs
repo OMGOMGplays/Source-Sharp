@@ -61,5 +61,27 @@ public class CThreadLocalInt : CThreadLocal<int>
         return lhs.Get();
     }
 
+    public static int operator +(CThreadLocalInt lhs)
+    {
+        int i = lhs.Get();
+        lhs.Set(++i);
+        return i;
+    }
+
+    public static int operator -(CThreadLocalInt lhs)
+    {
+        int i = lhs.Get();
+        lhs.Set(--i);
+        return i;
+    }
+}
+
+public class CThreadLocalPtr<T> : CThreadLocalBase
+{
+    public CThreadLocalPtr()
+    {
+
+    }
+
 
 }
